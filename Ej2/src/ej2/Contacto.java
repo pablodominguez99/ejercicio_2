@@ -16,7 +16,9 @@ public class Contacto {
 	
 
 
-
+	public Contacto() {
+		
+	}
 	public Contacto(String nombre,String apellidos,String email,String fechaN,ArrayList<String> intereses) {this.nombre = nombre; this.apellidos = apellidos; this.email = email;this.fecha_nacimiento = fechaN;this.intereses = intereses;}
 	public Contacto(Contacto c) {
 		
