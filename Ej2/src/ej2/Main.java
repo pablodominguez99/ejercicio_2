@@ -60,18 +60,23 @@ public class Main {
 							int op3 = sn.nextInt();
 							
 							
-							
-							switch(op3) {
-							
 							Fabrica f = new Fabrica();
 							Scanner sc1 = new Scanner(System.in);
 							String titulo;
 							String cuerpo;
-							String destinatarios;
+							String destinatario;
+							String intereses;
+							Anuncio a = f.getAnuncio(op3);
+							ArrayList<Contacto> dest = new ArrayList<Contacto>();
+							boolean loop = true;
+							int option;
+							
+							
+							switch(op3){
+							
 							
 							case 1:
 								
-								Anuncio a = f.getAnuncio(op3);
 								a.setId(id);
 								a.setTipo("General");
 								a.setDestinatarios(g.getContactos());
@@ -90,23 +95,42 @@ public class Main {
 								break;
 								
 							case 2:
-								
-														
-								Anuncio a2 = f.getAnuncio(op3);
+						
 								a.setId(id);
 								a.setTipo("Individualizado");
-								System.out.println("Introduce los destinatarios : ");
-								destinatarios = sc2.nextLine();
+								while(loop == true) {
+									System.out.println("Introduce el email del destinatario : ");
+									destinatario = sc1.nextLine();
+									if(g.existeContacto(destinatario)==1) {
+										dest.add(g.getContacto(email));
+									}else {
+										System.out.println("No existe el destinatario.");
+									}
+									
+									System.out.println("¿Desea introducir otro destinatario?");
+									System.out.println("1.Si");
+									System.out.println("2.No");
+									option = sc1.nextInt();
+									if(option==1) {
+										loop = true;
+									}else if(option == 2) {
+										loop = false;
+									}else {
+										System.out.println("Opcion no valida");
+									}
+								}
+								
+								a.setDestinatarios(dest);
 								
 								a.setDestinatarios(g.getContactos());
 								a.setPropietario(g.getContacto(email));
 								a.setIntereses(g.getInteresesValidos());
 								
 								System.out.println("Introducir titulo del anuncio : ");
-								titulo = sc2.nextLine();
+								titulo = sc1.nextLine();
 								
 								System.out.println("Introducir cuerpo del anuncio : ");
-								cuerpo = sc2.nextLine();
+								cuerpo = sc1.nextLine();
 								
 								a.setTitulo(titulo);
 								a.setCuerpo(cuerpo);
@@ -119,26 +143,24 @@ public class Main {
 								
 							case 3:
 
-														
-								Anuncio a3 = f.getAnuncio(op3);
 								a.setId(id);
 								a.setTipo("Tematico");
 								
 								System.out.println("Introduce los intereses : ");
-								intereses = sc2.nextLine();
+								intereses = sc1.nextLine();
 								
 								a.setDestinatarios(g.getContactos());
 								a.setPropietario(g.getContacto(email));
 								a.setIntereses(g.getInteresesValidos());
 								
 								System.out.println("Introducir titulo del anuncio : ");
-								titulo2 = sc2.nextLine();
+								titulo = sc1.nextLine();
 								
 								System.out.println("Introducir cuerpo del anuncio : ");
-								cuerpo2 = sc2.nextLine();
+								cuerpo = sc1.nextLine();
 								
-								a.setTitulo(titulo2);
-								a.setCuerpo(cuerpo2);
+								a.setTitulo(titulo);
+								a.setCuerpo(cuerpo);
 								a.setFechainicio(horaActual);
 								
 								
