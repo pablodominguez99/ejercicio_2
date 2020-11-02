@@ -1,0 +1,2 @@
+module ej2 {
+}
