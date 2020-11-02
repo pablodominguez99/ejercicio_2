@@ -70,6 +70,8 @@ public class Main {
 							ArrayList<Contacto> dest = new ArrayList<Contacto>();
 							boolean loop = true;
 							int option;
+							int diaI,mesI,anoI,horaI,minI,diaF,mesF,anoF,horaF,minF;
+
 							
 							
 							switch(op3){
@@ -92,6 +94,7 @@ public class Main {
 								
 								
 								an.add(a);
+								id++;
 								break;
 								
 							case 2:
@@ -138,6 +141,7 @@ public class Main {
 								
 								
 								an.add(a);
+								id++;
 								break;
 								
 								
@@ -165,8 +169,67 @@ public class Main {
 								
 								
 								an.add(a);
+								id++;
 								break;
 								
+							case 4:
+								a.setId(id);
+								a.setTipo("Flash");
+								a.setDestinatarios(g.getContactos());
+								a.setPropietario(g.getContacto(email));
+								a.setIntereses(g.getInteresesValidos());
+								
+								System.out.println("Introducir titulo del anuncio : ");
+								titulo = sc1.nextLine();
+								
+								System.out.println("Introducir cuerpo del anuncio : ");
+								cuerpo = sc1.nextLine();
+								
+								a.setTitulo(titulo);
+								a.setCuerpo(cuerpo);
+								System.out.println("Introducir año inicio : ");
+								anoI = sn.nextInt();
+								c.set(c.YEAR,anoI);
+								System.out.println("Introducir mes inicio : ");
+								mesI = sn.nextInt();
+								c.set(c.MONTH,mesI);
+								System.out.println("Introducir dia inicio : ");
+								diaI = sn.nextInt();
+								c.set(c.DAY_OF_MONTH,diaI);
+								System.out.println("Introducir hora inicio : ");
+								horaI = sn.nextInt();
+								c.set(c.HOUR_OF_DAY,horaI);
+								System.out.println("Introducir minuto inicio : ");
+								minI = sn.nextInt();
+								c.set(c.MINUTE,minI);
+								c.set(c.SECOND,00);
+								Date fechaInicio = c.getTime();
+								a.setFechainicio(fechaInicio);
+								
+								
+								System.out.println("Introducir año fin : ");
+								anoF = sn.nextInt();
+								c.set(c.YEAR,anoF);
+								System.out.println("Introducir mes fin : ");
+								mesF = sn.nextInt();
+								c.set(c.MONTH,mesF);
+								System.out.println("Introducir dia fin : ");
+								diaF = sn.nextInt();
+								c.set(c.DAY_OF_MONTH,diaF);
+								System.out.println("Introducir hora fin : ");
+								horaF = sn.nextInt();
+								c.set(c.HOUR_OF_DAY,horaF);
+								System.out.println("Introducir minuto fin : ");
+								minF = sn.nextInt();
+								c.set(c.MINUTE,minF);
+								c.set(c.SECOND,00);
+								Date fechaFin = c.getTime();
+								a.setFechafin(fechaFin);
+								
+								
+								an.add(a);
+								id++;
+								break;
 								
 								
 								
@@ -175,19 +238,17 @@ public class Main {
 							ArrayList<Anuncio> a = new ArrayList<Anuncio>(t.getAnuncios());
 							String cadena;
 							for(int j=0;j<a.size();j++) {
-								if(a.get(j).getTipo().equalsIgnoreCase("individualizado") && a.get(j).getDestinatarios().contains(g.getContacto(email))) {
+								if(a.get(j).getTipo().equalsIgnoreCase("Individualizado") && a.get(j).getDestinatarios().contains(g.getContacto(email))) {
 									String cadena2 = t.getInfoAnuncio(a.get(j));
 									System.out.println(cadena2);
-								}
-								if(a.get(j).getTipo().equals("flash"){
-									System.out.println("....");
-								}
-								
-								if(a.get(j).getTipo().equalsIgnoreCase("tematico") && g.getContacto(email).getIntereses().contains(intereses)) {
+								}else if(a.get(j).getTipo().equals("Flash") && horaActual.equals(a.get(j).getFechainicio()) && !horaActual.equals(a.get(j).getFechafin())){
+									System.out.println(t.getInfoAnuncio(a.get(j)));
+								}else if(a.get(j).getTipo().equalsIgnoreCase("Tematico") && g.getContacto(email).getIntereses().contains(a.get(j).getIntereses())) {
+									System.out.println(t.getInfoAnuncio(a.get(j)));
+								}else {
 									System.out.println(t.getInfoAnuncio(a.get(j)));
 								}
-								cadena = t.getInfoAnuncio(a.get(j));
-								System.out.println(cadena);
+								
 							}
 						}else if(op2 == 3) {
 							salir = true;
