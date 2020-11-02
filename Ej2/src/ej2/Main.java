@@ -23,9 +23,15 @@ public class Main {
 		GestorContactos g = GestorContactos.getInstance();
 		Tablon t = Tablon.getInstance();
 		
+		ArrayList<String> InteresesAux= new ArrayList();
+		
 		String ruta;
 		ruta = g.getRuta();
 		g.leerDeFichero(ruta);
+		
+		boolean encontrado=false;
+		
+		Contacto actual=new Contacto(null);
 		
 		
 		
@@ -39,9 +45,19 @@ public class Main {
 			System.out.println("Introducir email : ");
 			email = sn.nextLine();
 			for(int i=0;i<g.getContactos().size();i++) {
+				
 				if(g.getContactos().get(i).getEmail().equals(email)) {
+					 actual= g.getContactos().get(i);
+					encontrado=true;
+				}
+					
+			}
+			
+			
+			if (encontrado) {
+				if(actual.getEmail().equals(email)) {
 					while(salir == false) {
-						System.out.println("Bienvenido "+g.getContactos().get(i).getNombre());
+						System.out.println("Bienvenido "+actual.getNombre());
 						System.out.println("");
 						System.out.println("1.Crear Anuncio");
 						System.out.println("2.Mostrar tu tablón");
@@ -60,18 +76,24 @@ public class Main {
 							int op3 = sn.nextInt();
 							
 							
-							
-							switch(op3) {
-							
 							Fabrica f = new Fabrica();
 							Scanner sc1 = new Scanner(System.in);
 							String titulo;
 							String cuerpo;
-							String destinatarios;
+							String destinatario;
+							String intereses;
+							Anuncio a = f.getAnuncio(op3);
+							ArrayList<Contacto> dest = new ArrayList<Contacto>();
+							
+							boolean loop = true;
+							int option;
+							
+							
+							switch(op3){
+							
 							
 							case 1:
 								
-								Anuncio a = f.getAnuncio(op3);
 								a.setId(id);
 								a.setTipo("General");
 								a.setDestinatarios(g.getContactos());
@@ -90,23 +112,42 @@ public class Main {
 								break;
 								
 							case 2:
-								
-														
-								Anuncio a2 = f.getAnuncio(op3);
+						
 								a.setId(id);
 								a.setTipo("Individualizado");
-								System.out.println("Introduce los destinatarios : ");
-								destinatarios = sc2.nextLine();
+								while(loop == true) {
+									System.out.println("Introduce el email del destinatario : ");
+									destinatario = sc1.nextLine();
+									if(g.existeContacto(destinatario)==1) {
+										dest.add(g.getContacto(email));
+									}else {
+										System.out.println("No existe el destinatario.");
+									}
+									
+									System.out.println("¿Desea introducir otro destinatario?");
+									System.out.println("1.Si");
+									System.out.println("2.No");
+									option = sc1.nextInt();
+									if(option==1) {
+										loop = true;
+									}else if(option == 2) {
+										loop = false;
+									}else {
+										System.out.println("Opcion no valida");
+									}
+								}
+								
+								a.setDestinatarios(dest);
 								
 								a.setDestinatarios(g.getContactos());
 								a.setPropietario(g.getContacto(email));
 								a.setIntereses(g.getInteresesValidos());
 								
 								System.out.println("Introducir titulo del anuncio : ");
-								titulo = sc2.nextLine();
+								titulo = sc1.nextLine();
 								
 								System.out.println("Introducir cuerpo del anuncio : ");
-								cuerpo = sc2.nextLine();
+								cuerpo = sc1.nextLine();
 								
 								a.setTitulo(titulo);
 								a.setCuerpo(cuerpo);
@@ -119,26 +160,50 @@ public class Main {
 								
 							case 3:
 
-														
-								Anuncio a3 = f.getAnuncio(op3);
+								String comprobar;
+								
+								
 								a.setId(id);
 								a.setTipo("Tematico");
+							
+							while(!loop) {
 								
-								System.out.println("Introduce los intereses : ");
-								intereses = sc2.nextLine();
+								System.out.println("Escriba uno de los siguientes intereses: \n");
+								System.out.println("Pintura    Música    Deporte  \n");
+								System.out.println("Pesca      Cine      Fotografía  \n");
+								System.out.println("Viajes     Tecnología \n");
+								intereses = sc1.nextLine();
+								while(!g.validarElemento(intereses)) {
+									System.out.println("Interes no válido\n");
+									System.out.println("Introduce de nuevo el interes:");
+									intereses = sc1.nextLine();
+								}
+								InteresesAux.add(intereses);
 								
+								System.out.println("¿Desea añadir otro interés?\n");
+								System.out.println("Escribe Y/N");
+								comprobar = sc1.nextLine();
+								if(comprobar!="Y" || comprobar!="y") {
+									loop=true;
+								}
+							}
+							
+								
+								
+								
+							
 								a.setDestinatarios(g.getContactos());
 								a.setPropietario(g.getContacto(email));
-								a.setIntereses(g.getInteresesValidos());
+								a.setIntereses(InteresesAux);
 								
 								System.out.println("Introducir titulo del anuncio : ");
-								titulo2 = sc2.nextLine();
+								titulo = sc1.nextLine();
 								
 								System.out.println("Introducir cuerpo del anuncio : ");
-								cuerpo2 = sc2.nextLine();
+								cuerpo = sc1.nextLine();
 								
-								a.setTitulo(titulo2);
-								a.setCuerpo(cuerpo2);
+								a.setTitulo(titulo);
+								a.setCuerpo(cuerpo);
 								a.setFechainicio(horaActual);
 								
 								
@@ -151,32 +216,43 @@ public class Main {
 							}
 						}else if(op2 == 2){
 							ArrayList<Anuncio> a = new ArrayList<Anuncio>(t.getAnuncios());
-							String cadena;
+							
 							for(int j=0;j<a.size();j++) {
-								if(a.get(j).getTipo().equalsIgnoreCase("individualizado") && a.get(j).getDestinatarios().contains(g.getContacto(email))) {
-									String cadena2 = t.getInfoAnuncio(a.get(j));
-									System.out.println(cadena2);
-								}
-								if(a.get(j).getTipo().equals("flash"){
-									System.out.println("....");
-								}
 								
-								if(a.get(j).getTipo().equalsIgnoreCase("tematico") && g.getContacto(email).getIntereses().contains(intereses)) {
-									System.out.println(t.getInfoAnuncio(a.get(j)));
-								}
-								cadena = t.getInfoAnuncio(a.get(j));
-								System.out.println(cadena);
+								if(a.get(j).getTipo().equalsIgnoreCase("Individualizado") && a.get(j).getDestinatarios().contains(g.getContacto(email))) {
+	                                String cadena2 = t.getInfoAnuncio(a.get(j));
+	                                System.out.println(cadena2);
+	                            }else if(a.get(j).getTipo().equals("Flash") && horaActual.equals(a.get(j).getFechainicio()) && !horaActual.equals(a.get(j).getFechafin())){
+	                                System.out.println(t.getInfoAnuncio(a.get(j)));
+	                            }else if(a.get(j).getTipo().equalsIgnoreCase("Tematico") && g.getContacto(email).getIntereses().contains(InteresesAux)) {
+	                                System.out.println(t.getInfoAnuncio(a.get(j)));
+	                            }else {
+	                                System.out.println(t.getInfoAnuncio(a.get(j)));
+	                            }
 							}
-						}else if(op2 == 3) {
+								
+					}
+						
+						else if(op2 == 3) {
 							salir = true;
 						}
 					}
 					
-					}else {
-						System.out.println("No se ha encontrado el contacto");
-					}
-					
+				}
 			}
+			
+			
+			
+			
+
+		
+			
+			
+			
+			
+			
+			
+			
 			
 		}else if(op == 2){
 			System.out.println("Introduce email por favor : \n");
