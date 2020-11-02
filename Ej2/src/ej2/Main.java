@@ -59,12 +59,17 @@ public class Main {
 							System.out.println("4.Anuncio Flash");
 							int op3 = sn.nextInt();
 							
+							
+							
 							switch(op3) {
+							
+							Fabrica f = new Fabrica();
+							Scanner sc1 = new Scanner(System.in);
+							String titulo;
+							String cuerpo;
+							String destinatarios;
+							
 							case 1:
-								Fabrica f = new Fabrica();
-								Scanner sc1 = new Scanner(System.in);
-								String titulo;
-								String cuerpo;
 								
 								Anuncio a = f.getAnuncio(op3);
 								a.setId(id);
@@ -86,24 +91,52 @@ public class Main {
 								
 							case 2:
 								
-								Fabrica f2 = new Fabrica();
-								Scanner sc2 = new Scanner(System.in);
-								String titulo2;
-								String cuerpo2;
-								String destinatarios;
-								
+														
 								Anuncio a2 = f.getAnuncio(op3);
 								a.setId(id);
 								a.setTipo("Individualizado");
 								System.out.println("Introduce los destinatarios : ");
 								destinatarios = sc2.nextLine();
+								
 								a.setDestinatarios(g.getContactos());
 								a.setPropietario(g.getContacto(email));
 								a.setIntereses(g.getInteresesValidos());
+								
+								System.out.println("Introducir titulo del anuncio : ");
+								titulo = sc2.nextLine();
+								
+								System.out.println("Introducir cuerpo del anuncio : ");
+								cuerpo = sc2.nextLine();
+								
+								a.setTitulo(titulo);
+								a.setCuerpo(cuerpo);
+								a.setFechainicio(horaActual);
+								
+								
+								an.add(a);
+								break;
+								
+								
+							case 3:
+
+														
+								Anuncio a3 = f.getAnuncio(op3);
+								a.setId(id);
+								a.setTipo("Tematico");
+								
+								System.out.println("Introduce los intereses : ");
+								intereses = sc2.nextLine();
+								
+								a.setDestinatarios(g.getContactos());
+								a.setPropietario(g.getContacto(email));
+								a.setIntereses(g.getInteresesValidos());
+								
 								System.out.println("Introducir titulo del anuncio : ");
 								titulo2 = sc2.nextLine();
+								
 								System.out.println("Introducir cuerpo del anuncio : ");
 								cuerpo2 = sc2.nextLine();
+								
 								a.setTitulo(titulo2);
 								a.setCuerpo(cuerpo2);
 								a.setFechainicio(horaActual);
