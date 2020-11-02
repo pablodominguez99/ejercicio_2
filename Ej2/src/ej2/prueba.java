@@ -10,6 +10,7 @@ public class prueba {
 		
 		Calendar c = Calendar.getInstance();
 		
+		
 		Date horaActual = c.getTime();
 		
 		System.out.println(horaActual);

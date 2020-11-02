@@ -1,17 +1,14 @@
-package ejercicio2;
+package ej2;
 
 import java.util.ArrayList;
-
-import ejercicio1.Contacto;
-import ejercicio1.GestorContactos;
 
 public class AnuncioTematico extends Anuncio {
 	
 	GestorContactos g = GestorContactos.getInstance();
 	
 	
-	public AnuncioTematico(int id,String titulo,Contacto propietario,ArrayList<Contacto> destinatarios,String cuerpo) {
-		super(id,titulo,propietario,destinatarios,cuerpo);
+	public AnuncioTematico() {
+		super();
 	}
 	
 
@@ -27,9 +24,6 @@ public class AnuncioTematico extends Anuncio {
 			}
 		}
 		
-		for(int a = 0;a<ret.size();a++) {
-			System.out.println(ret.get(a).getNombre());
-		}
 		
 		return ret;
 	}
