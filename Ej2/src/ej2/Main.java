@@ -1,6 +1,8 @@
 package ej2;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Scanner;
 
 
@@ -13,6 +15,8 @@ public class Main {
 		Scanner teclado = new Scanner(System.in);
 		int op;
 		String email;
+		Calendar c = Calendar.getInstance();
+		Date horaActual = c.getTime();
 		
 		GestorContactos g = GestorContactos.getInstance();
 		Tablon t = Tablon.getInstance();
@@ -51,6 +55,9 @@ public class Main {
 						switch(op2) {
 						case 1:
 							Fabrica f = new Fabrica();
+							Scanner sc1 = new Scanner(System.in);
+							String titulo;
+							String cuerpo;
 							
 							Anuncio a = f.getAnuncio("General");
 							a.setId(id);
@@ -59,7 +66,13 @@ public class Main {
 							a.setPropietario(g.getContacto(email));
 							a.setIntereses(g.getInteresesValidos());
 							System.out.println("Introducir titulo del anuncio : ");
+							titulo = sc1.nextLine();
 							System.out.println("Introducir cuerpo del anuncio : ");
+							cuerpo = sc1.nextLine();
+							a.setTitulo(titulo);
+							a.setCuerpo(cuerpo);
+							a.setFechainicio(horaActual);
+							
 							
 							
 							

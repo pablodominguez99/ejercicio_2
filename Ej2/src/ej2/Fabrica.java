@@ -5,7 +5,6 @@ public class Fabrica implements Ifactory {
 	@Override
 	public Anuncio getAnuncio(String tipo) {
 		
-		int id = 1;
 		
 		if(tipo.equalsIgnoreCase("INDIVIDUALIZADO")) {
 			return new AnuncioIndividualizado();
@@ -18,6 +17,8 @@ public class Fabrica implements Ifactory {
 		}else {
 			System.out.println("Tipo de anuncio no valido.");
 		}
+		
+		return null;
 		
 	}
 	
