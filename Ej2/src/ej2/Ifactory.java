@@ -2,6 +2,6 @@ package ej2;
 
 public interface Ifactory {
 
-	public Anuncio getAnuncio(String tipo);
+	public Anuncio getAnuncio(int i);
 	
 }
