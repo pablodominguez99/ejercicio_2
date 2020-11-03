@@ -744,12 +744,10 @@ public class GestorContactos {
 	 */
 	
 	public Contacto getContacto(String email) {
-		Contacto c = null;
+		Contacto c = new Contacto();
 		for(int i=0;i<contactos.size();i++) {
-			if(!contactos.get(i).getEmail().contentEquals(email)) {
-				System.out.println("No se ha encontrado contacto.\n");
-			}else {
-				c = contactos.get(i);
+			if(contactos.get(i).getEmail().equalsIgnoreCase(email)) {
+				c = contactos.get(i);	
 			}
 		}
 		return c;
