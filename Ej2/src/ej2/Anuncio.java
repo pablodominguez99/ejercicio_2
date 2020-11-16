@@ -8,12 +8,13 @@ public class Anuncio {
 	private int id;
 	private String tipo;
 	private String titulo;
-	private Contacto propietario;
-	private ArrayList<Contacto> destinatarios;
+	private String propietario;
+	private ArrayList<String> destinatarios;
 	private Date fechainicio;
 	private Date fechafin;
 	private ArrayList<String> intereses;
 	private String cuerpo;
+	private String estado;
 	
 	
 	public Anuncio (){
@@ -24,6 +25,16 @@ public class Anuncio {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
+	
+	
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+	
+	public String getEstado() {
+		return estado;
+	}
+
 
 	public int getId() {
 		return id;
@@ -37,16 +48,16 @@ public class Anuncio {
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
 	}
-	public Contacto getPropietario() {
+	public String getPropietario() {
 		return propietario;
 	}
-	public void setPropietario(Contacto propietario) {
+	public void setPropietario(String propietario) {
 		this.propietario = propietario;
 	}
-	public ArrayList<Contacto> getDestinatarios() {
+	public ArrayList<String> getDestinatarios() {
 		return destinatarios;
 	}
-	public void setDestinatarios(ArrayList<Contacto> destinatarios) {
+	public void setDestinatarios(ArrayList<String> destinatarios) {
 		this.destinatarios = destinatarios;
 	}
 	public String getCuerpo() {

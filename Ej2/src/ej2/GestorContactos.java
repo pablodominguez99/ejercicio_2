@@ -603,6 +603,7 @@ public class GestorContactos {
 	       {
 	           //  Handle any exceptions.
 	       }
+	       System.out.println("\n");
 	}
 	
 	
@@ -613,7 +614,7 @@ public class GestorContactos {
 	
 	public String getRuta() {
 		
-		File file = new File("C:\\Users\\w10\\git\\trabajochupiguay\\Practica1\\src\\ejercicio1\\fichero.properties");
+		File file = new File("C:\\Users\\crist\\git\\ejercicio_2\\Ej2\\src\\ej2\\fichero.properties");
 		String propertiesPath = file.getAbsolutePath();
 		
 		Properties appProperties = new Properties();
@@ -744,12 +745,10 @@ public class GestorContactos {
 	 */
 	
 	public Contacto getContacto(String email) {
-		Contacto c = null;
+		Contacto c = new Contacto();
 		for(int i=0;i<contactos.size();i++) {
-			if(!contactos.get(i).getEmail().contentEquals(email)) {
-				System.out.println("No se ha encontrado contacto.\n");
-			}else {
-				c = contactos.get(i);
+			if(contactos.get(i).getEmail().equalsIgnoreCase(email)) {
+				c = contactos.get(i);	
 			}
 		}
 		return c;
