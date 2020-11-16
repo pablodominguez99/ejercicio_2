@@ -185,7 +185,9 @@ public class Main {
 													an.add(a);
 													id++;
 													
-													System.out.println("\n¡Anuncio creado!\n");
+													System.out.println("\n¡Anuncio creado!");
+													System.out.println("RECUERDE que no será visible hasta que lo publique en el GESTOR DE ANUNCIOS");
+
 													break;
 													
 													
@@ -339,6 +341,7 @@ public class Main {
 													a.setFechainicio(horaActual);
 													a.setEstado("Editado");
 													System.out.println("\n¡Anuncio creado!\n");
+													a.setIntereses(InteresesAux);
 
 													
 												
@@ -368,13 +371,13 @@ public class Main {
 													a.setCuerpo(cuerpo);
 													do {
 														System.out.println("Introduce la fecha de inicio del anuncio: (Por favor sigue el formato DD/MM/YYYY) ");
-														 fecha_inicio=sc1.nextLine();
+														 fecha_inicio=sn.nextLine();
 														
 														if (!g.validarFecha(fecha_inicio)) {
 															System.out.println("Fecha introducida no válida ");
-
+															
 														}
-													}while(g.validarFecha(fecha_inicio));
+													}while(!g.validarFecha(fecha_inicio));
 		
 													String day=fecha_inicio.substring(0,1);
 													String month=fecha_inicio.substring(3,4);
@@ -410,13 +413,13 @@ public class Main {
 													
 													do {
 														System.out.println("Introduce la fecha de fin del anuncio: (Por favor sigue el formato DD/MM/YYYY) ");
-														 fecha_fin=sc1.nextLine();
+														 fecha_fin=sn.nextLine();
 														
 														if (!g.validarFecha(fecha_fin)) {
 															System.out.println("Fecha introducida no válida ");
 
 														}
-													}while(g.validarFecha(fecha_inicio));
+													}while(!g.validarFecha(fecha_inicio));
 		
 													day=fecha_fin.substring(0,1);
 													month=fecha_fin.substring(3,4);
@@ -479,15 +482,56 @@ public class Main {
 									//ESCOGIDO "MOSTRAR TU TABLÓN" EN MENÚ 2
 
 									
-									
-									
-									
-									
-									/*if(a.get(j).getTipo().equalsIgnoreCase("Individualizado") && a.get(j).getDestinatarios().contains(actual.getEmail())) 
+									for(int i=0;i<an.size();i++) 
 									{
-										t.getInfoAnuncio(a.get(j));
+										if(an.get(i).getTipo().contentEquals("General") && an.get(i).getEstado().contentEquals("Publicado") )
+										{
+											t.mostrarAnuncio(an.get(i));
+										}
 										
-									}*/
+										
+										
+										else if(an.get(i).getTipo().contentEquals("Individualizado") && an.get(i).getEstado().contentEquals("Publicado"))
+										{
+											for (int j=0; j<an.get(i).getDestinatarios().size();j++)
+											{
+												if(an.get(i).getDestinatarios().get(j).contentEquals(actual.getEmail()))
+												{
+													t.mostrarAnuncio(an.get(i));
+
+												}
+											}
+										}
+										
+										
+										else if(an.get(i).getTipo().contentEquals("Tematico") && an.get(i).getEstado().contentEquals("Publicado"))
+										{
+											for (int j=0; j<an.get(i).getDestinatarios().size();j++)
+											{
+												if(an.get(i).getDestinatarios().get(j).contentEquals(actual.getEmail()))
+												{
+													t.mostrarAnuncio(an.get(i));
+
+												}
+											}
+										}
+										
+										else if(an.get(i).getTipo().contentEquals("Flash") && an.get(i).getEstado().contentEquals("Publicado"))
+										{
+											Date hoy=new Date();
+												if(hoy.after(an.get(i).getFechainicio()) && hoy.before(an.get(i).getFechafin()))
+												{
+													t.mostrarAnuncio(an.get(i));
+
+												}
+											
+										}
+										
+									}
+									
+									
+									
+									
 									
 									//FIN ESCOGIDO "MOSTRAR TU TABLÓN" EN MENÚ 2
 								break;
@@ -511,6 +555,8 @@ public class Main {
 									{
 										System.out.println("¡Vaya, parece que todavía no tienes nigún anuncio!");
 										System.out.println("\nPara crear tu primer Anuncio vuelve al menú anterior y selecciona 'Crear anuncio'");
+										GestorContactos.press_any_key_to_continue();
+										break;
 									}
 									else {
 										
@@ -518,13 +564,14 @@ public class Main {
 											do{
 												//MENU CREAR ANUNCIO ((SEGUNDO)TERCER MENÚ)
 
-												System.out.println("1.Editar anuncio / guardar anuncio..");
+												System.out.println("1.Editar anuncio / guardar anuncio");
 												System.out.println("2.Publicar anuncio");
-												System.out.println("3.Archivar anuncio.");
-												System.out.println("4.Buscar por fecha.");
+												System.out.println("3.Archivar anuncio");
+												System.out.println("4.Buscar por fecha");
 												System.out.println("5.Buscar por tema de interés");
-												System.out.println("6.Buscar por usuario propietario.");
-												System.out.println("7.Buscar por usuario destinatario.");
+												System.out.println("6.Buscar por usuario propietario");
+												System.out.println("7.Buscar por usuario destinatario");
+												System.out.println("8.Eliminar anuncio");
 
 												System.out.println("0.Volver");
 												
@@ -585,7 +632,8 @@ public class Main {
 														System.out.println("4.Fecha finalización                         (Solo anuncios 'Flash') ");
 														System.out.println("5.Usuarios destinatarios.                    (Solo anuncios 'Individualizados')");
 														System.out.println("6.Modificar Intereses usuarios destinatarios.(Solo anuncios 'Temáticos'");
-																										
+														System.out.println("0.Volver");
+												
 														
 														int elemento_editar = escan.nextInt();
 														
@@ -602,7 +650,7 @@ public class Main {
 																		{
 																			an.get(i).setTitulo(nuevo_titulo);
 																			cambiado=true;
-																			an.get(i).setEstado("En_espera");
+																			an.get(i).setEstado("Editado");
 
 																		}
 															}
@@ -619,7 +667,7 @@ public class Main {
 																		{
 																			an.get(i).setTitulo(nuevo_Cuerpo);
 																			cambiado=true;
-																			an.get(i).setEstado("En_espera");
+																			an.get(i).setEstado("Editado");
 
 																			
 																		}
@@ -653,7 +701,7 @@ public class Main {
 																		System.out.println("Fecha introducida no válida ");
 
 																	}
-																}while(g.validarFecha(fecha_inicio));
+																}while(!g.validarFecha(fecha_inicio));
 					
 																String day=fecha_inicio.substring(0,1);
 																String month=fecha_inicio.substring(3,4);
@@ -687,7 +735,7 @@ public class Main {
 																Date fechaINICIO = c.getTime();
 																cambiado=true;
 																a_modificar.setFechainicio(fechaINICIO);
-																a_modificar.setEstado("En_espera");
+																a_modificar.setEstado("En espera");
 
 																
 
@@ -725,7 +773,7 @@ public class Main {
 																		System.out.println("Fecha introducida no válida ");
 
 																	}
-																}while(g.validarFecha(fecha_fin));
+																}while(!g.validarFecha(fecha_fin));
 					
 																String day=fecha_fin.substring(0,1);
 																String month=fecha_fin.substring(3,4);
@@ -757,7 +805,7 @@ public class Main {
 																
 																a_modificar.setFechafin(fechaFIN);
 																cambiado=true;
-																a_modificar.setEstado("En_espera");
+																a_modificar.setEstado("En espera");
 
 															}
 															else {
@@ -832,7 +880,7 @@ public class Main {
 																
 															a_modificar.setDestinatarios(aux);	
 															cambiado=true;
-															a_modificar.setEstado("En_espera");
+															a_modificar.setEstado("Editado");
 
 															}
 															else {
@@ -886,6 +934,7 @@ public class Main {
 																			intereses = sn.nextLine();
 																		}
 																		InteresesAux.add(intereses);
+																		
 																		Contacto auxiliar =new Contacto();
 																		
 																		for(int i=0;i<g.getContactos().size();i++)				//AÑADIMOS LAS PERSONAS INTERESADAS EN
@@ -921,9 +970,9 @@ public class Main {
 																		
 																	}while(out==1);
 																	
-																	
+																	a_modificar.setIntereses(InteresesAux);
 																	a_modificar.setDestinatarios(aux);	
-																	a_modificar.setEstado("En_espera");
+																	a_modificar.setEstado("Editado");
 																	cambiado=true;
 																	
 																	
@@ -966,6 +1015,7 @@ public class Main {
 																		}
 															}
 														
+															boolean es_flash=false;
 															System.out.println("\nPor favor, introduce el ID del anuncio que desee publicar: ");
 															int ID_publicar = escan.nextInt();
 															
@@ -977,11 +1027,22 @@ public class Main {
 																			an.get(i).setEstado("Publicado");
 																			found=true;
 																			
+																			if(an.get(i).getTipo().contentEquals("Flash"))
+																			{
+																				es_flash=true;
+																			}
+																			
 																		}
 															}
 															
 															if(found) {
-																System.out.println("¡Publicado! El anuncio será visible a partir de ahora");
+																System.out.println("¡Publicado! El anuncio será visible a partir de ahora\n");
+																GestorContactos.press_any_key_to_continue();
+															}
+															else if(es_flash){
+																
+																System.out.println("¡Publicado! El anuncio será visible a partir de la fecha indicada de inicio\n");
+																GestorContactos.press_any_key_to_continue();
 
 															}
 															else {
@@ -996,25 +1057,363 @@ public class Main {
 														
 													case 3:			//ARCHIVAR ANUNCIO										
 
+														
+														System.out.println("A continuación se muestran sus anuncios 'publicados' : ");
+														
+
+														
+														for(int i=0;i<an.size();i++)
+														{
+															if(an.get(i).getPropietario().contentEquals(actual.getEmail()) && an.get(i).getEstado().contentEquals("Publicado"))
+																	{
+																		t.getInfoAnuncio(an.get(i));
+																	}
+														}
+														
+														System.out.println("\nPor favor, introduce el ID del anuncio que desee publicar: ");
+														ID_publicar = escan.nextInt();
+														
+														
+														found=false;
+
+														
+														for(int i=0;i<an.size();i++)
+														{
+															if(an.get(i).getId()==ID_publicar)
+																	{
+																		
+																		an.get(i).setEstado("Archivado");
+																		found=true;
+																														
+																	}
+														}
+														
+														if(found) {
+															System.out.println("El anuncio ha sido archivado");
+															GestorContactos.press_any_key_to_continue();
+
+														}
+														
+														
 														break;
 														
 													case 4:			//BUSCAR POR FECHA										
 
+														String fecha;
+														
+														do {
+															System.out.println("Introduce la fecha de inicio del anuncio a buscar: (Por favor sigue el formato DD/MM/YYYY) ");
+															fecha=sn.nextLine();
+															
+															if (!g.validarFecha(fecha)) {
+																System.out.println("Fecha introducida no válida ");
+
+															}
+														}while(!g.validarFecha(fecha));
+														
+														String day=fecha.substring(0,1);
+														String month=fecha.substring(3,4);
+														String year=fecha.substring(6,7);
+														
+														int diaI = Integer.parseInt(day);
+														int mesI = Integer.parseInt(month);
+														int anoI = Integer.parseInt(year);
+														
+														for(int i=0;i<an.size();i++)
+														{
+															
+															@SuppressWarnings("deprecation")
+															int aux_dia=an.get(i).getFechainicio().getDay();
+															int aux_mes=an.get(i).getFechainicio().getMonth();
+															int aux_ano=an.get(i).getFechainicio().getYear();
+
+															if(aux_dia==diaI && aux_mes==mesI && aux_ano==anoI)
+																	{
+																		
+																	t.getInfoAnuncio(an.get(i));
+																														
+																	}
+														}
+														
+														
 														break;
 														
 														
 													case 5:			//BUSCAR POR TEMA DE INTERES									
-
+														String interes;
+														do{
+															System.out.println("Introduzca el interes del anuncio a buscar");
+															System.out.println("Escriba uno de los siguientes : \n");
+															System.out.println("Pintura    Música    Deporte  \n");
+															System.out.println("Pesca      Cine      Fotografía  \n");
+															System.out.println("Viajes     Tecnología \n");
+															
+															 interes = sn.nextLine();
+															System.out.println("");
+															
+															if(!g.validarElemento(interes))
+															{
+																System.out.println("Interes no válido");
+															}
+															
+														
+														
+														}while(!g.validarElemento(interes));
+														
+														if(interes=="musica" || interes=="música" ||interes=="Musica"||interes=="Música")
+														{
+															for(int i=0;i<an.size();i++)
+															{
+																for(int j=0; j<an.get(i).getIntereses().size();j++) {
+																	
+																	
+																	String auxiliar=an.get(i).getIntereses().get(j);
+																	if(auxiliar=="musica" || auxiliar=="música" ||auxiliar=="Musica"||auxiliar=="Música")
+																	{
+																		
+																	t.getInfoAnuncio(an.get(i));
+																														
+																	}
+																	
+																}
+																																
+															}
+															
+															
+														}
+														else if(interes=="tecnologia" || interes=="Tecnologia" ||interes=="Tecnología"||interes=="tecnología")
+														{
+															for(int i=0;i<an.size();i++)
+															{
+																for(int j=0; j<an.get(i).getIntereses().size();j++) {
+																	
+																	
+																	String auxiliar=an.get(i).getIntereses().get(j);
+																	if(auxiliar=="tecnologia" || auxiliar=="Tecnologia" ||auxiliar=="Tecnología"||auxiliar=="tecnología")
+																	{
+																		
+																	t.getInfoAnuncio(an.get(i));
+																														
+																	}
+																	
+																}
+																																
+															}
+															
+															
+														}
+														else if(interes=="fotografia" || interes=="fotografía" ||interes=="Fotografia"||interes=="Fotografía")
+														{
+															for(int i=0;i<an.size();i++)
+															{
+																for(int j=0; j<an.get(i).getIntereses().size();j++) {
+																	
+																	
+																	String auxiliar=an.get(i).getIntereses().get(j);
+																	if(auxiliar=="fotografia" || auxiliar=="fotografía" ||auxiliar=="Fotografia"||auxiliar=="Fotografía")
+																	{
+																		
+																	t.getInfoAnuncio(an.get(i));
+																														
+																	}
+																	
+																}
+																																
+															}
+															
+															
+														}
+														
+														else if(interes=="Pintura" || interes=="pintura")
+														{
+															for(int i=0;i<an.size();i++)
+															{
+																for(int j=0; j<an.get(i).getIntereses().size();j++) {
+																	
+																	
+																	String auxiliar=an.get(i).getIntereses().get(j);
+																	if(auxiliar=="Pintura" || auxiliar=="pintura" )
+																	{
+																		
+																	t.getInfoAnuncio(an.get(i));
+																														
+																	}
+																	
+																}
+																																
+															}
+																
+														}
+														else if(interes=="Cine" || interes=="cine")
+														{
+															for(int i=0;i<an.size();i++)
+															{
+																for(int j=0; j<an.get(i).getIntereses().size();j++) {
+																	
+																	
+																	String auxiliar=an.get(i).getIntereses().get(j);
+																	if(auxiliar=="Cine" || auxiliar=="cine" )
+																	{
+																		
+																	t.getInfoAnuncio(an.get(i));
+																														
+																	}
+																	
+																}
+																																
+															}
+																
+														}
+														else if(interes=="Pesca" || interes=="pesca")
+														{
+															for(int i=0;i<an.size();i++)
+															{
+																for(int j=0; j<an.get(i).getIntereses().size();j++) {
+																	
+																	
+																	String auxiliar=an.get(i).getIntereses().get(j);
+																	if(auxiliar=="Pesca" || auxiliar=="pesca" )
+																	{
+																		
+																	t.getInfoAnuncio(an.get(i));
+																														
+																	}
+																	
+																}
+																																
+															}
+																
+														}
+														else if(interes=="Deporte" || interes=="deporte")
+														{
+															for(int i=0;i<an.size();i++)
+															{
+																for(int j=0; j<an.get(i).getIntereses().size();j++) {
+																	
+																	
+																	String auxiliar=an.get(i).getIntereses().get(j);
+																	if(auxiliar=="Pintura" || auxiliar=="pintura" )
+																	{
+																		
+																	t.getInfoAnuncio(an.get(i));
+																														
+																	}
+																	
+																}
+																																
+															}
+																
+														}
+														else if(interes=="Viajes" || interes=="viajes")
+														{
+															for(int i=0;i<an.size();i++)
+															{
+																for(int j=0; j<an.get(i).getIntereses().size();j++) {
+																	
+																	
+																	String auxiliar=an.get(i).getIntereses().get(j);
+																	if(auxiliar=="Viajes" || auxiliar=="viajes" )
+																	{
+																		
+																	t.getInfoAnuncio(an.get(i));
+																														
+																	}
+																	
+																}
+																																
+															}
+																
+														}
+														
+														
+														
 														break;
 														
 														
 													case 6:			//BUSCAR POR PROPIETARIO										
+													String email_usuario_prop;
+													
+														System.out.println("Por favor introduzca el email del propietario a buscar sus anuncios");
+														
+														email_usuario_prop = sn.nextLine();
+														
+													
+														for(int i=0; i<an.size();i++)
+														{
+															if(an.get(i).getPropietario().contentEquals(email_usuario_prop))
+															{
+																t.getInfoAnuncio(an.get(i));
 
+															}
+														}
+														
 														break;
 														
 														
 													case 7:			//BUSCAR POR DESTINATARIO										
 
+														
+														String email_usuario_dest;
+														
+														System.out.println("Por favor introduzca el email del destinatario a buscar sus anuncios");
+														
+														email_usuario_dest = sn.nextLine();
+														
+													
+														for(int i=0; i<an.size();i++)
+														{
+															for(int j=0;j<an.get(i).getDestinatarios().size();j++)
+															{
+																if(an.get(i).getDestinatarios().get(j).contentEquals(email_usuario_dest)) 
+																{
+																	t.getInfoAnuncio(an.get(i));
+
+																}
+															}
+														}
+														
+														break;
+														
+													case 8:         //ELIMINAR ANUNCIO
+														
+														
+														System.out.println("A continuación se muestran sus anuncios 'publicados' : ");
+														
+
+														
+														for(int i=0;i<an.size();i++)
+														{
+															if(an.get(i).getPropietario().contentEquals(actual.getEmail()))
+																	{
+																		t.getInfoAnuncio(an.get(i));
+																	}
+														}
+														
+														System.out.println("\nPor favor, introduce el ID del anuncio que desee publicar: ");
+														ID_publicar = escan.nextInt();
+														
+														
+														found=false;
+
+														
+														for(int i=0;i<an.size();i++)
+														{
+															if(an.get(i).getId()==ID_publicar)
+																	{
+																		
+																		an.remove(i);
+																		found=true;										
+																	}
+														}
+														
+														if(found) {
+															System.out.println("El anuncio ha sido eliminado");
+														}
+														
+														
+														
+														
+														
 														break;
 														
 														
@@ -1025,9 +1424,8 @@ public class Main {
 											
 											}while(op3!=0);
 											
-														
+										break;		
 										}
-										
 										
 									}
 								

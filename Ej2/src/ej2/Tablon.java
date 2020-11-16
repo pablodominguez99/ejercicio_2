@@ -53,15 +53,31 @@ public class Tablon {
 		}
 		
 	}
+	public void mostrarAnuncio(Anuncio a) {
+		
+		
+		
+		System.out.println("\nTitulo            : "+a.getTitulo());
+		System.out.println("Cuerpo            : "+a.getCuerpo());
+		System.out.println("Propietario       : "+a.getPropietario());
+		System.out.println("Fecha Publicación : "+a.getFechainicio());
 
+
+		
+		
+		System.out.println("\n------------------------------------");
+
+		
+		
+	}
 	
 	public void getInfoAnuncio(Anuncio a) {
 		
 		
 	
 		System.out.println("\nTitulo            : "+a.getTitulo());
-		System.out.println("Id                :"+ a.getId());
-		System.out.println("Tipo              :"+ a.getTipo());
+		System.out.println("Id                : "+ a.getId());
+		System.out.println("Tipo              : "+ a.getTipo());
 		System.out.println("Cuerpo            : "+a.getCuerpo());
 		System.out.println("Propietario       : "+a.getPropietario());
 		System.out.println("Fecha Publicación : "+a.getFechainicio());
