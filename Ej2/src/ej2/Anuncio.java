@@ -14,6 +14,7 @@ public class Anuncio {
 	private Date fechafin;
 	private ArrayList<String> intereses;
 	private String cuerpo;
+	private String estado;
 	
 	
 	public Anuncio (){
@@ -24,6 +25,16 @@ public class Anuncio {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
+	
+	
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+	
+	public String getEstado() {
+		return estado;
+	}
+
 
 	public int getId() {
 		return id;
