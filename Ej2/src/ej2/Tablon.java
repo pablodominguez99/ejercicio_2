@@ -10,9 +10,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Properties;
-
+import java.util.Calendar;
+import java.util.Date;
 public class Tablon {
 
+	Calendar c = Calendar.getInstance();				//FORMATO FECHA
+	Date horaActual = c.getTime();
 	
 	private ArrayList<Anuncio> anuncios;
 	
@@ -39,14 +42,52 @@ public class Tablon {
 	public void setAnuncios(ArrayList<Anuncio> anuncios) {
 		this.anuncios = anuncios;
 	}
-
 	
-	public String getInfoAnuncio(Anuncio a) {
-		String cadena;
+	public void determinarEstado(Date fechaInicio){
 		
-		cadena = "Titulo : "+a.getTitulo()+" Propietario : "+a.getPropietario()+" Cuerpo : "+a.getCuerpo();
+		Date fechaActual= new Date();
+		String estado;
 		
-		return cadena;
+		if(fechaInicio.after(fechaActual)) {
+			estado="publicado";
+		}
+		
+	}
+	public void mostrarAnuncio(Anuncio a) {
+		
+		
+		
+		System.out.println("\nTitulo            : "+a.getTitulo());
+		System.out.println("Cuerpo            : "+a.getCuerpo());
+		System.out.println("Propietario       : "+a.getPropietario());
+		System.out.println("Fecha Publicación : "+a.getFechainicio());
+
+
+		
+		
+		System.out.println("\n------------------------------------");
+
+		
+		
+	}
+	
+	public void getInfoAnuncio(Anuncio a) {
+		
+		
+	
+		System.out.println("\nTitulo            : "+a.getTitulo());
+		System.out.println("Id                : "+ a.getId());
+		System.out.println("Tipo              : "+ a.getTipo());
+		System.out.println("Cuerpo            : "+a.getCuerpo());
+		System.out.println("Propietario       : "+a.getPropietario());
+		System.out.println("Fecha Publicación : "+a.getFechainicio());
+		System.out.println("Estado del anuncio: "+a.getEstado());
+
+		
+		
+		System.out.println("\n------------------------------------");
+
+		
 		
 	}
 /*
