@@ -42,14 +42,6 @@ public class Main {
 		
 		
 		
-		
-		ruta = g.getRuta();									//LEEMOS DEL FICHERO
-		g.leerDeFichero(ruta);
-		
-		
-		
-		
-		
 		while(salir == false) 
 		{
 			
@@ -80,20 +72,10 @@ public class Main {
 				System.out.println("Introducir email : ");						//COMPROBAMOS EL EMAIL, SI ES ENCONTRADO DEVOLVEMOS TRUE
 				email = sn.nextLine();											//Y GUARDAMOS LA INFORMACIÓN DEL CONTACTO
 				
-				
-					for(int i=0;i<g.getContactos().size();i++)
-					
-					{
-						if(g.getContactos().get(i).getEmail().equals(email))
-						{
-							actual= g.getContactos().get(i);
-							encontrado=true;
-						}
-						
-					}
+				java.util.Hashtable<String,String> result = ContactoDAO.mostrarContacto(email);
 				
 				
-					if (encontrado) 
+					if (result!=null) // esto esta actualizado para BASE DE DATOS
 					{	
 						
 																				//ENTRAMOS EN EL SEGUNDO MENÚ PERSONAL
@@ -1469,7 +1451,8 @@ public class Main {
 			case 2:
 				
 			//ESCOGIDO "REGISTRARSE" EN EL MENÚ 1
-			
+				
+				
 			
 				System.out.println("Introduce un email por favor : \n");
 				String contactoEmail= sn.nextLine();
@@ -1548,7 +1531,14 @@ public class Main {
 				}	
 				
 				
-				g.crearContacto(nombre,apellidos,contactoEmail,fechaN,aux);
+				Contacto contacto = new Contacto(nombre,apellidos,contactoEmail,fechaN,aux);
+				int a = ContactoDAO.saveContacto(contacto);
+				
+				if(a!=0) {
+					System.out.println("Contacto guardado de forma correcta");
+				}else {
+					System.out.println("Error al guardar contacto");
+				}
 				
 				GestorContactos.press_any_key_to_continue();
 				GestorContactos.clearConsole();

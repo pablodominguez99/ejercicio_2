@@ -14,7 +14,7 @@ public class ContactoDAO {
 		  Class.forName("com.mysql.jdbc.Driver");
 		  // Introducir correctamente el nombre y datos de conexión - Idealmente, estos datos se 
 		  // indican en un fichero de propiedades
-		  con= DriverManager.getConnection("jdbc:mysql://oraclepr.uco.es:3306/basedatos","usuario","password");
+		  con= DriverManager.getConnection("jdbc:mysql://oraclepr.uco.es:3306/i82doalp","i82doalp","1234");
 		// Importante capturar 
 		} catch(Exception e) {
 		  System.out.println(e);
@@ -25,18 +25,18 @@ public class ContactoDAO {
 	  // Método para insertar una fila
 	  // En ningún caso es recomendable el paso por parámetro de los valores individuales
 	  // Se recomienda utilizar el UserBean o una clase envoltorio User que tenga estas propiedades
-	  public static int save(int id, String last, String first, int age){
+	  public static int saveContacto(Contacto c){
 		int status=0;
 		try{
 			Connection con=getConnection();
 			// PreparedStament será más rápido (si es uso recurrente) y permite invocación a parámetros
 			// Lo habitual es que las consultas y sentencias SQL estén en un fichero de propiedades aparte, no en código
-			PreparedStatement ps=con.prepareStatement("insert into User (id,last,first,age) values(?,?,?,?)");
+			PreparedStatement ps=con.prepareStatement("insert into Contacto (nombre,apellidos,email,fecha_nacimiento) values(?,?,?,?)");
 			// El orden de los parámetros debe coincidir con las '?' del código SQL
-			ps.setInt(1,id);
-			ps.setString(2,last);
-			ps.setString(3,first);
-			ps.setInt(4,age);
+			ps.setString(1,c.getNombre());
+			ps.setString(2,c.getApellidos());
+			ps.setString(3,c.getEmail());
+			ps.setString(4,c.getFechaN());
 			status = ps.executeUpdate();
 		// Importante capturar las excepciones. Si nuestra aplicaciones tiene más opciones de fallo,
 		// podemos capturar directamente SQLException
@@ -46,41 +46,38 @@ public class ContactoDAO {
 	}
 	  
 	// Método para actualizar un usuario
-	public static int update(int id, String last, String first, int age){
+	public static int updateContacto(Contacto c){
 		int status=0;
 		try{
 			Connection con=getConnection();
-			PreparedStatement ps=con.prepareStatement("update User set last=?,first=?,age=? where id=?");
-			ps.setString(1,last);
-			ps.setString(2,first);
-			ps.setInt(3,age);
-			// En este caso, 'id' va después, conforme al orden de la sentencia SQL
-			ps.setInt(4,id);
+			PreparedStatement ps=con.prepareStatement("update Contacto set nombre=?,apellidos=?,fecha_nacimiento=? where email=?");
+			ps.setString(1,c.getNombre());
+			ps.setString(2,c.getApellidos());
+			ps.setString(3,c.getFechaN());
+			ps.setString(4,c.getEmail());
 			status=ps.executeUpdate();
 		}catch(Exception e){System.out.println(e);}
 		return status;
 	}
 
 	// Para la consulta, se ha tomado una estructura Hash (columna-tabla, valor)
-	public static Hashtable<String,String> queryById (int id) {
+	public static Hashtable<String,String> mostrarContacto (String email) {
 		Statement stmt = null; 
 		Hashtable<String,String> resul = null;
 		try {
 			Connection con=getConnection();
 			// En consultas, se hace uso de un Statement 
 			stmt = con.createStatement();
-		    ResultSet rs = stmt.executeQuery("select last, first, age from User where id = " + id);
+		    ResultSet rs = stmt.executeQuery("select nombre, apellidos, fecha_nacimiento from Contacto where email = \"" +email+"\"");
 		    while (rs.next()) {
-		    	String last = rs.getString("last");
-		        String first = rs.getString("first");
-		        int age = rs.getInt("age");
+		    	String nombre = rs.getString("nombre");
+		        String apellidos = rs.getString("apellidos");
+		        String fecha_nacimiento = rs.getString("fecha_nacimiento");
 		        resul = new Hashtable<String,String>();
-		        resul.put("id", Integer.toString(id));
-		        resul.put("last", last);
-		        resul.put("first", first);
-		        resul.put("age", Integer.toString(age));        
-		        System.out.println(id + "\t" + last +
-		                               "\t" + first + "\t" + age);
+		        resul.put("nombre", nombre);
+		        resul.put("apellidos", apellidos);
+		        resul.put("email", email);
+		        resul.put("fecha_nacimiento", fecha_nacimiento);        
 		    }
 		    // Se debe tener precaución con cerrar las conexiones, uso de auto-commit, etc.
 		    if (stmt != null) 
@@ -91,15 +88,18 @@ public class ContactoDAO {
 		return resul;
 	} 
 
-	public static int delete(int id){
+	public static int delete(String email){
 		int status=0;
 		try{
 			Connection con=getConnection();
-			PreparedStatement ps=con.prepareStatement("delete from User where id=?");
-			ps.setInt(1,id);
+			PreparedStatement ps=con.prepareStatement("delete from Contacto where email=?");
+			ps.setString(1,email);
 			status=ps.executeUpdate();
 		}catch(Exception e){System.out.println(e);}
 
 		return status;
 	}
+	
+	
+	
 }

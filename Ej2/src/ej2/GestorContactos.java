@@ -612,28 +612,27 @@ public class GestorContactos {
 	 * @return una cadena String que es la ruta del fichero properties
 	 */
 	
-	public String getRuta() {
-		
-		File file = new File("C:\\Users\\crist\\git\\ejercicio_2\\Ej2\\src\\ej2\\fichero.properties");
-		String propertiesPath = file.getAbsolutePath();
-		
-		Properties appProperties = new Properties();
-		
-		try {
-			appProperties.load(new FileInputStream(propertiesPath));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		String ruta = appProperties.getProperty("ruta");
-		
-		
-		return ruta;
-		
-		
-	}
+	/*
+	 * public String getRuta() {
+	 * 
+	 * File file = new
+	 * File("C:\\Users\\crist\\git\\ejercicio_2\\Ej2\\src\\ej2\\fichero.properties")
+	 * ; String propertiesPath = file.getAbsolutePath();
+	 * 
+	 * Properties appProperties = new Properties();
+	 * 
+	 * try { appProperties.load(new FileInputStream(propertiesPath)); } catch
+	 * (FileNotFoundException e) { e.printStackTrace(); } catch (IOException e) {
+	 * e.printStackTrace(); }
+	 * 
+	 * String ruta = appProperties.getProperty("ruta");
+	 * 
+	 * 
+	 * return ruta;
+	 * 
+	 * 
+	 * }
+	 */
 	
 	/**
 	 * Este método se encarga de escribir los contactos en un fichero.
@@ -642,56 +641,43 @@ public class GestorContactos {
 	 * @param c Lista de contactos del gestor de contactos
 	 */
 	
-	public void escribirEnFichero() {
-		
-		String nombre = "";
-		String apellidos = "";
-		String email = "";
-		String fechaN = "";
-		ArrayList<String> intereses = new ArrayList<String>();
-		
-		
-		String rutaFichero = getRuta();
-		
-		
-		
-		try {
-			FileWriter fichero = new FileWriter(rutaFichero,false);
-			PrintWriter pw = new PrintWriter(fichero);
-			for(int i=0;i<getContactos().size();i++) {
-				email = getContactos().get(i).getEmail();
-				nombre = getContactos().get(i).getNombre();
-				apellidos = getContactos().get(i).getApellidos();				
-				fechaN = getContactos().get(i).getFechaN();
-				intereses = getContactos().get(i).getIntereses();
-				
-				pw.println(nombre);
-				pw.println(apellidos);
-				pw.println(email);
-				pw.println(fechaN);
-				for(int j=0;j<intereses.size();j++) {
-					if(j== intereses.size()-1) {
-						 pw.print(intereses.get(j)+"\n");
-					}else {
-						 pw.print(intereses.get(j) + ",");
-					}
-					
-				}
-				
-			}
-			pw.close();
-			fichero.close();
-			
-			
-			
-			
-			
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
+	/*
+	 * public void escribirEnFichero() {
+	 * 
+	 * String nombre = ""; String apellidos = ""; String email = ""; String fechaN =
+	 * ""; ArrayList<String> intereses = new ArrayList<String>();
+	 * 
+	 * 
+	 * String rutaFichero = getRuta();
+	 * 
+	 * 
+	 * 
+	 * try { FileWriter fichero = new FileWriter(rutaFichero,false); PrintWriter pw
+	 * = new PrintWriter(fichero); for(int i=0;i<getContactos().size();i++) { email
+	 * = getContactos().get(i).getEmail(); nombre =
+	 * getContactos().get(i).getNombre(); apellidos =
+	 * getContactos().get(i).getApellidos(); fechaN =
+	 * getContactos().get(i).getFechaN(); intereses =
+	 * getContactos().get(i).getIntereses();
+	 * 
+	 * pw.println(nombre); pw.println(apellidos); pw.println(email);
+	 * pw.println(fechaN); for(int j=0;j<intereses.size();j++) { if(j==
+	 * intereses.size()-1) { pw.print(intereses.get(j)+"\n"); }else {
+	 * pw.print(intereses.get(j) + ","); }
+	 * 
+	 * }
+	 * 
+	 * } pw.close(); fichero.close();
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * } catch (IOException e) { e.printStackTrace(); }
+	 * 
+	 * }
+	 */
 	
 	/**
 	 * Este método recibe la ruta del fichero properties y devuelve una lista con los contactos
@@ -704,40 +690,28 @@ public class GestorContactos {
 	 * @return una lista con los contactos del fichero de contactos
 	 */
 	
-	public void leerDeFichero(String ruta) {	
-			
-			try {
-				FileReader fr;
-				fr = new FileReader(ruta);
-				BufferedReader br = new BufferedReader(fr);
-				String cadena;
-				String nombre = "",apellidos = "",email = "",fechaN = "";
-				ArrayList<String> intereses =  new ArrayList<String>();
-				
-				while((cadena = br.readLine())!=null) {
-				
-						nombre = cadena;
-						cadena = br.readLine();
-						apellidos = cadena;
-						cadena = br.readLine();
-						email = cadena;
-						cadena = br.readLine();
-						fechaN = cadena;
-						cadena = br.readLine();
-						ArrayList<String> aux = new ArrayList<String>(devolver_array(cadena));
-						
-						
-						crearContacto(nombre,apellidos,email,fechaN,aux);
-						
-						intereses.clear();
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-	}
-	
+	/*
+	 * public void leerDeFichero(String ruta) {
+	 * 
+	 * try { FileReader fr; fr = new FileReader(ruta); BufferedReader br = new
+	 * BufferedReader(fr); String cadena; String nombre = "",apellidos = "",email =
+	 * "",fechaN = ""; ArrayList<String> intereses = new ArrayList<String>();
+	 * 
+	 * while((cadena = br.readLine())!=null) {
+	 * 
+	 * nombre = cadena; cadena = br.readLine(); apellidos = cadena; cadena =
+	 * br.readLine(); email = cadena; cadena = br.readLine(); fechaN = cadena;
+	 * cadena = br.readLine(); ArrayList<String> aux = new
+	 * ArrayList<String>(devolver_array(cadena));
+	 * 
+	 * 
+	 * crearContacto(nombre,apellidos,email,fechaN,aux);
+	 * 
+	 * intereses.clear(); } } catch (IOException e) { // TODO Auto-generated catch
+	 * block e.printStackTrace(); }
+	 * 
+	 * }
+	 */
 	/**
 	 * Esta función recibe el email del contacto que se quiere buscar y lo devuelve.
 	 * @param email
