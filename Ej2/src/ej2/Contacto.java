@@ -20,6 +20,7 @@ public class Contacto {
 		
 	}
 	public Contacto(String nombre,String apellidos,String email,String fechaN,ArrayList<String> intereses) {this.nombre = nombre; this.apellidos = apellidos; this.email = email;this.fecha_nacimiento = fechaN;this.intereses = intereses;}
+	public Contacto(String nombre,String apellidos,String email,String fechaN) {this.nombre = nombre; this.apellidos = apellidos; this.email = email;this.fecha_nacimiento = fechaN;}
 	public Contacto(Contacto c) {
 		
 		this.nombre = c.nombre; 

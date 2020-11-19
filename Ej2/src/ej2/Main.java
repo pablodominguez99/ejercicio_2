@@ -39,6 +39,10 @@ public class Main {
 		GestorContactos g = GestorContactos.getInstance();	//INSTANCIAS AUXILIARES
 		Tablon t = Tablon.getInstance();	
 		
+		ArrayList<Contacto> guardados = new ArrayList<Contacto>();	//Estamos metiendo contactos desde base de
+																	//datos
+		guardados = ContactoDAO.meterContactos();
+		g.setContactos(guardados);
 		
 		
 		
@@ -72,10 +76,15 @@ public class Main {
 				System.out.println("Introducir email : ");						//COMPROBAMOS EL EMAIL, SI ES ENCONTRADO DEVOLVEMOS TRUE
 				email = sn.nextLine();											//Y GUARDAMOS LA INFORMACIÓN DEL CONTACTO
 				
-				java.util.Hashtable<String,String> result = ContactoDAO.mostrarContacto(email);
+				//java.util.Hashtable<String,String> result = ContactoDAO.mostrarContacto(email);
+				for(int i=0;i<guardados.size();i++) {
+					if(guardados.get(i).getEmail().contentEquals(email)) {
+						actual = guardados.get(i);
+						encontrado = true;
+					}
+				}
 				
-				
-					if (result!=null) // esto esta actualizado para BASE DE DATOS
+					if (!guardados.isEmpty()) // esto esta actualizado para BASE DE DATOS
 					{	
 						
 																				//ENTRAMOS EN EL SEGUNDO MENÚ PERSONAL

@@ -89,6 +89,10 @@ public class GestorContactos {
 		return this.contactos;
 	}
 	
+	public void setContactos(ArrayList<Contacto> c) {
+		this.contactos = c;
+	}
+	
 	/**
 	 * Este método comprueba si el interés introducido por el usuario es válido.
 	 * <p>

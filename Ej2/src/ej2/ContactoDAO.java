@@ -1,6 +1,7 @@
 package ej2;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class ContactoDAO {
@@ -98,6 +99,30 @@ public class ContactoDAO {
 		}catch(Exception e){System.out.println(e);}
 
 		return status;
+	}
+	
+	
+	public static ArrayList<Contacto> meterContactos(){
+		Statement stmt = null; 
+		ArrayList<Contacto> contactos = new ArrayList<Contacto>();
+		try{
+			Connection con=getConnection();
+			stmt = con.createStatement();
+		    ResultSet rs = stmt.executeQuery("select nombre, apellidos, email, fecha_nacimiento from Contacto");
+		    while (rs.next()) {
+		    	String nombre = rs.getString("nombre");
+		        String apellidos = rs.getString("apellidos");
+		        String email = rs.getString("email");
+		        String fecha_nacimiento = rs.getString("fecha_nacimiento");
+		        Contacto c = new Contacto(nombre,apellidos,email,fecha_nacimiento);  
+		        contactos.add(c);
+		    }
+		    
+		    if (stmt != null) 
+		    	stmt.close();
+		}catch(Exception e){System.out.println(e);}
+
+		return contactos;
 	}
 	
 	
