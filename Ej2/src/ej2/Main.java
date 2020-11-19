@@ -484,14 +484,14 @@ public class Main {
 									
 									for(int i=0;i<an.size();i++) 
 									{
-										if(an.get(i).getTipo().contentEquals("General") && an.get(i).getEstado().contentEquals("Publicado") )
+										if(an.get(i).getTipo().contentEquals("General") || an.get(i).getEstado().contentEquals("Publicado") )
 										{
 											t.mostrarAnuncio(an.get(i));
 										}
 										
 										
 										
-										else if(an.get(i).getTipo().contentEquals("Individualizado") && an.get(i).getEstado().contentEquals("Publicado"))
+										else if(an.get(i).getTipo().contentEquals("Individualizado") || an.get(i).getEstado().contentEquals("Publicado"))
 										{
 											for (int j=0; j<an.get(i).getDestinatarios().size();j++)
 											{
@@ -504,7 +504,7 @@ public class Main {
 										}
 										
 										
-										else if(an.get(i).getTipo().contentEquals("Tematico") && an.get(i).getEstado().contentEquals("Publicado"))
+										else if(an.get(i).getTipo().contentEquals("Tematico") || an.get(i).getEstado().contentEquals("Publicado"))
 										{
 											for (int j=0; j<an.get(i).getDestinatarios().size();j++)
 											{
@@ -516,7 +516,7 @@ public class Main {
 											}
 										}
 										
-										else if(an.get(i).getTipo().contentEquals("Flash") && an.get(i).getEstado().contentEquals("Publicado"))
+										else if(an.get(i).getTipo().contentEquals("Flash") || an.get(i).getEstado().contentEquals("Publicado"))
 										{
 											Date hoy=new Date();
 												if(hoy.after(an.get(i).getFechainicio()) && hoy.before(an.get(i).getFechafin()))
