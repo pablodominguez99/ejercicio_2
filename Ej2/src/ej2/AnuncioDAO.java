@@ -5,10 +5,11 @@ package ej2;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Date;
 
 // Sería recomendable tener una clase DAO que guardara los métodos comunes (p.ej. getConnection()) y 
 // de la que heredase esta clase y el resto de DAOs
-public class UserDAO {
+public class AnuncioDAO {
   // Método que establece la conexión con la base de datos
   // NOTA: Los métodos estáticos no son obligatorios (ni siquiera los más apropiados):
   // Se ha escrito de esta manera únicamente para facilitar la ejecución
@@ -38,12 +39,16 @@ public class UserDAO {
 		// Lo habitual es que las consultas y sentencias SQL estén en un fichero de propiedades aparte, no en código
 		PreparedStatement ps=con.prepareStatement("insert into User (Id,Tipo,Titulo,Propietario,Fecha_Inicio,Fecha_Fin,Cuerpo) values(?,?,?,?,?,?,?)");
 		// El orden de los parámetros debe coincidir con las '?' del código SQL
+		
+		
+		
+		
 		ps.setInt(1,a.getId());
 		ps.setString(2,a.getTipo());
 		ps.setString(3,a.getTitulo());
 		ps.setString(4,a.getPropietario());
-		ps.setString(5,a.getFechaInicio());
-		ps.setString(6,a.getFechaFin());
+		ps.setString(5,a.getFechainicio().toString());
+		ps.setString(6,a.getFechafin().toString());
 		ps.setString(7,a.getCuerpo());
 		
 		status = ps.executeUpdate();
@@ -54,7 +59,7 @@ public class UserDAO {
 	return status;
 }
   
-  public static int GuardarDestinatarios(ArrayList<String> destinatarios){
+  public static int GuardarDestinatarios(){
 	int status=0;
 	try{
 		Connection con=getConnection();
