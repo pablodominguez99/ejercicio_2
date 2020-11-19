@@ -37,7 +37,7 @@ public class AnuncioDAO {
 		Connection con=getConnection();
 		// PreparedStament será más rápido (si es uso recurrente) y permite invocación a parámetros
 		// Lo habitual es que las consultas y sentencias SQL estén en un fichero de propiedades aparte, no en código
-		PreparedStatement ps=con.prepareStatement("insert into User (Id,Tipo,Titulo,Propietario,Fecha_Inicio,Fecha_Fin,Cuerpo) values(?,?,?,?,?,?,?)");
+		PreparedStatement ps=con.prepareStatement("insert into Anuncio (Id,Tipo,Titulo,Propietario,Fecha_inicio,Fecha_fin,Cuerpo) values(?,?,?,?,?,?,?)");
 		// El orden de los parámetros debe coincidir con las '?' del código SQL
 		
 		
@@ -59,21 +59,17 @@ public class AnuncioDAO {
 	return status;
 }
   
-  public static int GuardarDestinatarios(){
+  public static int GuardarDestinatarios(Anuncio a, Contacto c){
 	int status=0;
 	try{
 		Connection con=getConnection();
 		// PreparedStament será más rápido (si es uso recurrente) y permite invocación a parámetros
 		// Lo habitual es que las consultas y sentencias SQL estén en un fichero de propiedades aparte, no en código
-		PreparedStatement ps=con.prepareStatement("insert into User (Id,Tipo,Titulo,Propietario,Fecha_Inicio,Fecha_Fin,Cuerpo) values(?,?,?,?,?,?,?)");
+		PreparedStatement ps=con.prepareStatement("insert into A_D (id_anuncio,email) values(?,?)");
 		// El orden de los parámetros debe coincidir con las '?' del código SQL
 		ps.setInt(1,a.getId());
-
-		for (int i=0;i<destinatarios.size();i++)
-		{
-			destinatarios.get(i)
-			
-		}
+		ps.setString(2, c.getEmail());
+		
 		
 		status = ps.executeUpdate();
 	// Importante capturar las excepciones. Si nuestra aplicaciones tiene más opciones de fallo,
@@ -91,41 +87,52 @@ public class AnuncioDAO {
   
   
 // Método para actualizar un usuario
-public static int update(int id, String last, String first, int age){
+public static int update(Anuncio a){
 	int status=0;
 	try{
 		Connection con=getConnection();
-		PreparedStatement ps=con.prepareStatement("update User set last=?,first=?,age=? where id=?");
-		ps.setString(1,last);
-		ps.setString(2,first);
-		ps.setInt(3,age);
+		PreparedStatement ps=con.prepareStatement("update Anuncio set Titulo=?,Fecha_inicio=?,Fecha_fin=?,Cuerpo=? where Id=?");
+		ps.setString(1,a.getTitulo());
+		ps.setString(2,a.getFechainicio().toString());
+		ps.setString(3,a.getFechafin().toString());
+		ps.setString(4,a.getCuerpo());
+		
 		// En este caso, 'id' va después, conforme al orden de la sentencia SQL
-		ps.setInt(4,id);
+		ps.setInt(4,a.getId());
 		status=ps.executeUpdate();
 	}catch(Exception e){System.out.println(e);}
 	return status;
 }
 
 // Para la consulta, se ha tomado una estructura Hash (columna-tabla, valor)
-public static Hashtable<String,String> queryById (int id) {
+public static Hashtable<String,String> mostrarAnuncio  (Anuncio a) {
 	Statement stmt = null; 
 	Hashtable<String,String> resul = null;
 	try {
 		Connection con=getConnection();
 		// En consultas, se hace uso de un Statement 
 		stmt = con.createStatement();
-	    ResultSet rs = stmt.executeQuery("select last, first, age from User where id = " + id);
+	    ResultSet rs = stmt.executeQuery("select Id,Tipo,Titulo,Propietario,Fecha_inicio,Fecha_fin,Cuerpo  from Anuncio where Id = " + a.getId());
 	    while (rs.next()) {
-	    	String last = rs.getString("last");
-	        String first = rs.getString("first");
-	        int age = rs.getInt("age");
+	    	int id = rs.getInt("Id");
+	        String tipo = rs.getString("Tipo");
+	        String titulo = rs.getString("Titulo");
+	        String propietario = rs.getString("Propietario");
+	        String fecha_inicio = rs.getString("Fecha_inicio");
+	        String fecha_fin = rs.getString("Fecha_fin");
+	        String cuerpo = rs.getString("Cuerpo");
+
+
 	        resul = new Hashtable<String,String>();
-	        resul.put("id", Integer.toString(id));
-	        resul.put("last", last);
-	        resul.put("first", first);
-	        resul.put("age", Integer.toString(age));        
-	        System.out.println(id + "\t" + last +
-	                               "\t" + first + "\t" + age);
+			resul.put("Id",Integer.toString(id) );
+			resul.put("Tipo", tipo);
+			resul.put("Titulo", titulo);
+			resul.put("Propietario", propietario);     
+			resul.put("Fecha_inicio", fecha_inicio);     
+			resul.put("Fecha_fin", fecha_fin);     
+			resul.put("Cuerpo", cuerpo);      
+	        System.out.println(id + "\t" + tipo +
+	                               "\t" + titulo + "\t" + propietario+ "\t" + fecha_inicio+ "\t" + fecha_fin+ "\t" + cuerpo);
 	    }
 	    // Se debe tener precaución con cerrar las conexiones, uso de auto-commit, etc.
 	    if (stmt != null) 
@@ -136,14 +143,17 @@ public static Hashtable<String,String> queryById (int id) {
 	return resul;
 } 
 
-public static int delete(int id){
+public static int delete(Anuncio a){
 	int status=0;
 	try{
 		Connection con=getConnection();
-		PreparedStatement ps=con.prepareStatement("delete from User where id=?");
-		ps.setInt(1,id);
+		PreparedStatement ps=con.prepareStatement("delete from Anuncio where Id=?");
+		ps.setString(1,Integer.toString(a.getId()));
 		status=ps.executeUpdate();
 	}catch(Exception e){System.out.println(e);}
 
 	return status;
+}
+
+	
 }
