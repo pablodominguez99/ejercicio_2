@@ -13,7 +13,7 @@ public class Main {
 		int op;
 		int op2;
 		int op3;
-		int id = 1;											//VARIABLES ENTERAS AUXILIARES
+		int id = 0;										//VARIABLES ENTERAS AUXILIARES
 		
 		
 		boolean salir = false;								
@@ -30,7 +30,7 @@ public class Main {
 		
 		
 		Calendar c = Calendar.getInstance();				//FORMATO FECHA
-		Date horaActual = c.getTime();
+		Date horaActual = new Date();
 		
 		
 		ArrayList<Anuncio> an = new ArrayList<Anuncio>();	//ARRAYLISTS AUXILIARES
@@ -163,7 +163,7 @@ public class Main {
 														aux.add(g.getContactos().get(i).getEmail());
 													}
 													a.setDestinatarios(aux);
-													a.setPropietario(g.getContacto(email).getEmail());
+													a.setPropietario(g.getContacto(email).getEmail()); // el propietario es el contacto que esta en el menu.
 													a.setIntereses(g.getInteresesValidos());
 													System.out.println("Introducir titulo del anuncio : ");
 													titulo = sc1.nextLine();
@@ -171,18 +171,47 @@ public class Main {
 													cuerpo = sc1.nextLine();
 													
 													
+													c.set(c.HOUR_OF_DAY,00);
+													c.set(c.MINUTE,00);
+													c.set(c.SECOND,00);
+													
+													Date fFin = c.getTime();
+													
+													
+													if(t.getAnuncios().isEmpty()) {
+														id = 1;
+													}else {
+														id = t.getAnuncios().get(t.getAnuncios().size()-1).getId();
+														id++;
+													}
+													
 													a.setId(id);						//ESTABLECEMOS LOS VALORES DE ANUNCIO a Y LO
 													a.setTipo("General");				//AÑADIMOS A LA LISTA GENERAL DE ANUNCIOS
 													a.setTitulo(titulo);
 													a.setCuerpo(cuerpo);
 													a.setFechainicio(horaActual);
+													a.setFechafin(fFin);
 													a.setEstado("Editado");
 													an.add(a);
+													int status = AnuncioDAO.GuardarAnuncio(a);
+													
+													if(status!=0) {
+														System.out.println("\n¡Anuncio creado!");
+														System.out.println("RECUERDE que no será visible hasta que lo publique en el GESTOR DE ANUNCIOS");
+
+													}else {
+														System.out.println("Error al guardar anuncio en la base de datos.");
+													}
+													
+													
+													status = AnuncioDAO.GuardarDestinatarios(a,actual);
+													if(status == 0) {
+														System.out.println("Error al guardar anuncio en la base de datos.");
+													}
+													
 													id++;
 													
-													System.out.println("\n¡Anuncio creado!");
-													System.out.println("RECUERDE que no será visible hasta que lo publique en el GESTOR DE ANUNCIOS");
-
+													
 													break;
 													
 													

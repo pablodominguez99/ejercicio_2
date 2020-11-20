@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Date;
@@ -58,7 +59,7 @@ public class AnuncioDAO {
 		  Properties appProps = new Properties();
 		  appProps.load(new FileInputStream(confPath));//Cargamos las propiedades
 		  
-		  String save = appProps.getProperty("nuevo anuncio");//pasamos la instruccion sql a una variable.
+		  String save = appProps.getProperty("nuevo_anuncio");//pasamos la instruccion sql a una variable.
 		
 		
 		Connection con=getConnection();
@@ -86,16 +87,26 @@ public class AnuncioDAO {
 	return status;
 }
   
-  public static int GuardarDestinatarios(Anuncio a, Contacto c){
+  public static int GuardarDestinatarios(Anuncio a,Contacto c){
 	int status=0;
 	try{
+/*
+		File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\sql.properties"); //establecemos la ruta del archivo config.properties
+		  String confPath = f.getPath(); //convertimos la ruta del fichero config a una variable string
+		  
+		  Properties appProps = new Properties();
+		  appProps.load(new FileInputStream(confPath)); // cargamos las propiedades del fichero
+		  
+		  String destinatarios = appProps.getProperty("guardar_destinatarios");
+		
+	*/	
 		Connection con=getConnection();
 		// PreparedStament será más rápido (si es uso recurrente) y permite invocación a parámetros
 		// Lo habitual es que las consultas y sentencias SQL estén en un fichero de propiedades aparte, no en código
-		PreparedStatement ps=con.prepareStatement("insert into A_D (id_anuncio,email) values(?,?)");
+		PreparedStatement ps=con.prepareStatement("insert into A_D (idAnuncio,idContacto) values(?,?)");
 		// El orden de los parámetros debe coincidir con las '?' del código SQL
 		ps.setInt(1,a.getId());
-		ps.setString(2, c.getEmail());
+		ps.setString(2,c.getEmail());
 		
 		
 		status = ps.executeUpdate();
@@ -207,7 +218,7 @@ public static ArrayList<Anuncio> meterAnuncios(){
 		  Properties appProps = new Properties();
 		  appProps.load(new FileInputStream(confPath));//Cargamos las propiedades
 		  
-		  String todos_anuncios = appProps.getProperty("seleccionar anuncios");//pasamos la instruccion sql a una variable.
+		  String todos_anuncios = appProps.getProperty("seleccionar_anuncios");//pasamos la instruccion sql a una variable.
 		
 		
 		
@@ -219,16 +230,76 @@ public static ArrayList<Anuncio> meterAnuncios(){
 	    	String tipo = rs.getString("Tipo");
 	        String titulo = rs.getString("Titulo");
 	        String propietario = rs.getString("Propietario");
-	        Date fecha_inicio = rs.getDate("Fecha_inicio");
-	        Date fecha_fin = rs.getDate("Fecha_fin");
+	        String fecha_inicio = rs.getString("Fecha_inicio");
+	        String fecha_fin = rs.getString("Fecha_fin");
 	        String cuerpo = rs.getString("Cuerpo");
 	        Anuncio a = new Anuncio();
+	        
+	        Calendar c = Calendar.getInstance();
+	        
+	        String day=fecha_inicio.substring(0,1);
+			String month=fecha_inicio.substring(3,4);
+			String year=fecha_inicio.substring(6,9);
+			
+			int diaI = Integer.parseInt(day);
+			int mesI = Integer.parseInt(month);
+			int anoI = Integer.parseInt(year);
+			
+
+			String hora=fecha_inicio.substring(11,12);
+			String minuto=fecha_inicio.substring(14,15);
+			String segundos = fecha_inicio.substring(17,18);
+			
+			int horaI = Integer.parseInt(hora);
+			int minI = Integer.parseInt(minuto);
+			int secI = Integer.parseInt(segundos);
+			
+
+			c.set(c.YEAR,anoI);
+			c.set(c.MONTH,mesI);
+			c.set(c.DAY_OF_MONTH,diaI);
+			c.set(c.HOUR_OF_DAY,horaI);
+			c.set(c.MINUTE,minI);
+			c.set(c.SECOND,secI);
+			Date fechaInicio = c.getTime();
+			a.setFechainicio(fechaInicio);
+			
+			
+			 day=fecha_inicio.substring(0,1);
+			 month=fecha_inicio.substring(3,4);
+			 year=fecha_inicio.substring(6,9);
+			
+			int diaF = Integer.parseInt(day);
+			int mesF = Integer.parseInt(month);
+			int anoF = Integer.parseInt(year);
+			
+
+			 hora=fecha_fin.substring(11,12);
+			 minuto=fecha_fin.substring(14,15);
+			 segundos = fecha_fin.substring(17,18);
+			
+			int horaF = Integer.parseInt(hora);
+			int minF = Integer.parseInt(minuto);
+			int secF = Integer.parseInt(segundos);
+			
+
+			c.set(c.YEAR,anoF);
+			c.set(c.MONTH,mesF);
+			c.set(c.DAY_OF_MONTH,diaF);
+			c.set(c.HOUR_OF_DAY,horaF);
+			c.set(c.MINUTE,minF);
+			c.set(c.SECOND,secF);
+			Date fechaFin = c.getTime();
+			a.setFechainicio(fechaFin);
+	        
+	        
+	        
+	        
+	        
 	        a.setId(id);
 	        a.setTipo(tipo);
 	        a.setTitulo(titulo);
 	        a.setPropietario(propietario);
-	        a.setFechainicio(fecha_inicio);
-	        a.setFechafin(fecha_fin);
 	        a.setCuerpo(cuerpo);
 	        anuncios.add(a);
 	    }

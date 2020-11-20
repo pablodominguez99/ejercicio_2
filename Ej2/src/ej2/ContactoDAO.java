@@ -54,7 +54,7 @@ public class ContactoDAO {
 			  Properties appProps = new Properties();
 			  appProps.load(new FileInputStream(confPath));//Cargamos las propiedades
 			  
-			  String save = appProps.getProperty("nuevo contacto");//pasamos la instruccion sql a una variable.
+			  String save = appProps.getProperty("nuevo_contacto");//pasamos la instruccion sql a una variable.
 			
 			
 			
@@ -90,7 +90,7 @@ public class ContactoDAO {
 			  Properties appProps = new Properties();
 			  appProps.load(new FileInputStream(confPath));//Cargamos las propiedades
 			  
-			  String update = appProps.getProperty("update contacto");//pasamos la instruccion sql a una variable.
+			  String update = appProps.getProperty("update_contacto");//pasamos la instruccion sql a una variable.
 			
 			Connection con=getConnection();
 			PreparedStatement ps=con.prepareStatement(update);
@@ -116,7 +116,7 @@ public class ContactoDAO {
 			  Properties appProps = new Properties();
 			  appProps.load(new FileInputStream(confPath));//Cargamos las propiedades
 			  
-			  String mostrar = appProps.getProperty("mostrar contacto");//pasamos la instruccion sql a una variable.
+			  String mostrar = appProps.getProperty("mostrar_contacto");//pasamos la instruccion sql a una variable.
 			
 			
 			Connection con=getConnection();
@@ -159,9 +159,17 @@ public class ContactoDAO {
 		Statement stmt = null; 
 		ArrayList<Contacto> contactos = new ArrayList<Contacto>();
 		try{
+			
+			File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
+			  String confPath = f.getPath();//Pasamos el path del fichero a una variable String
+			  
+			  Properties appProps = new Properties();
+			  appProps.load(new FileInputStream(confPath));//Cargamos las propiedades
+			  String seleccionar_contactos = appProps.getProperty("seleccionar_contactos");
+			
 			Connection con=getConnection();
 			stmt = con.createStatement();
-		    ResultSet rs = stmt.executeQuery("select nombre, apellidos, email, fecha_nacimiento from Contacto");
+		    ResultSet rs = stmt.executeQuery(seleccionar_contactos);
 		    while (rs.next()) {
 		    	String nombre = rs.getString("nombre");
 		        String apellidos = rs.getString("apellidos");
