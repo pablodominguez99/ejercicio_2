@@ -44,6 +44,10 @@ public class Main {
 		guardados = ContactoDAO.meterContactos();
 		g.setContactos(guardados);
 		
+		ArrayList<Anuncio> anuncios_guardados = new ArrayList<Anuncio>();
+		
+		anuncios_guardados = AnuncioDAO.meterAnuncios();
+		t.setAnuncios(anuncios_guardados);
 		
 		
 		while(salir == false) 
