@@ -1,8 +1,12 @@
 package ej2;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Properties;
+
 
 public class ContactoDAO {
 	// Método que establece la conexión con la base de datos
@@ -13,9 +17,23 @@ public class ContactoDAO {
 		Connection con=null;
 		try {
 		  Class.forName("com.mysql.jdbc.Driver");
+		  
+		  
+		  File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\config.properties"); //establecemos la ruta del archivo config.properties
+		  String confPath = f.getPath(); //convertimos la ruta del fichero config a una variable string
+		  
+		  Properties appProps = new Properties();
+		  appProps.load(new FileInputStream(confPath)); // cargamos las propiedades del fichero
+		  
+		
+		  
+		  String acceso = appProps.getProperty("path"); //cojemos los parametros para conectar con la base de datos
+		  String user = appProps.getProperty("user");
+		  String pass = appProps.getProperty("pass");	
+		  
 		  // Introducir correctamente el nombre y datos de conexión - Idealmente, estos datos se 
 		  // indican en un fichero de propiedades
-		  con= DriverManager.getConnection("jdbc:mysql://oraclepr.uco.es:3306/i82doalp","i82doalp","1234");
+		  con= DriverManager.getConnection(acceso,user,pass);
 		// Importante capturar 
 		} catch(Exception e) {
 		  System.out.println(e);
@@ -29,10 +47,22 @@ public class ContactoDAO {
 	  public static int saveContacto(Contacto c){
 		int status=0;
 		try{
+			
+			File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
+			  String confPath = f.getPath();//Pasamos el path del fichero a una variable String
+			  
+			  Properties appProps = new Properties();
+			  appProps.load(new FileInputStream(confPath));//Cargamos las propiedades
+			  
+			  String save = appProps.getProperty("nuevo contacto");//pasamos la instruccion sql a una variable.
+			
+			
+			
+			
 			Connection con=getConnection();
 			// PreparedStament será más rápido (si es uso recurrente) y permite invocación a parámetros
 			// Lo habitual es que las consultas y sentencias SQL estén en un fichero de propiedades aparte, no en código
-			PreparedStatement ps=con.prepareStatement("insert into Contacto (nombre,apellidos,email,fecha_nacimiento) values(?,?,?,?)");
+			PreparedStatement ps=con.prepareStatement(save);
 			// El orden de los parámetros debe coincidir con las '?' del código SQL
 			ps.setString(1,c.getNombre());
 			ps.setString(2,c.getApellidos());
@@ -49,9 +79,21 @@ public class ContactoDAO {
 	// Método para actualizar un usuario
 	public static int updateContacto(Contacto c){
 		int status=0;
+		
+		 
+		
 		try{
+			
+			File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
+			  String confPath = f.getPath();//Pasamos el path del fichero a una variable String
+			  
+			  Properties appProps = new Properties();
+			  appProps.load(new FileInputStream(confPath));//Cargamos las propiedades
+			  
+			  String update = appProps.getProperty("update contacto");//pasamos la instruccion sql a una variable.
+			
 			Connection con=getConnection();
-			PreparedStatement ps=con.prepareStatement("update Contacto set nombre=?,apellidos=?,fecha_nacimiento=? where email=?");
+			PreparedStatement ps=con.prepareStatement(update);
 			ps.setString(1,c.getNombre());
 			ps.setString(2,c.getApellidos());
 			ps.setString(3,c.getFechaN());
@@ -66,10 +108,21 @@ public class ContactoDAO {
 		Statement stmt = null; 
 		Hashtable<String,String> resul = null;
 		try {
+			
+
+			File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
+			  String confPath = f.getPath();//Pasamos el path del fichero a una variable String
+			  
+			  Properties appProps = new Properties();
+			  appProps.load(new FileInputStream(confPath));//Cargamos las propiedades
+			  
+			  String mostrar = appProps.getProperty("mostrar contacto");//pasamos la instruccion sql a una variable.
+			
+			
 			Connection con=getConnection();
 			// En consultas, se hace uso de un Statement 
 			stmt = con.createStatement();
-		    ResultSet rs = stmt.executeQuery("select nombre, apellidos, fecha_nacimiento from Contacto where email = \"" +email+"\"");
+		    ResultSet rs = stmt.executeQuery(mostrar);
 		    while (rs.next()) {
 		    	String nombre = rs.getString("nombre");
 		        String apellidos = rs.getString("apellidos");
