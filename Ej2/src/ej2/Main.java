@@ -43,8 +43,7 @@ public class Main {
 																	//datos
 		guardados = ContactoDAO.meterContactos();
 		g.setContactos(guardados);
-		
-		
+
 		
 		while(salir == false) 
 		{
@@ -52,7 +51,8 @@ public class Main {
 			//PRIMER MENU
 			
 			
-			
+			System.out.println("Menu Anuncios");
+
 			System.out.println("Menu Anuncios");
 			System.out.println("");
 			System.out.println("1.Iniciar Sesion.");
