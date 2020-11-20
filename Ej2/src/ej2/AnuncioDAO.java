@@ -2,9 +2,12 @@
 package ej2;
 
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Properties;
 import java.util.Date;
 
 // Sería recomendable tener una clase DAO que guardara los métodos comunes (p.ej. getConnection()) y 
@@ -17,10 +20,24 @@ public class AnuncioDAO {
 	// En primer lugar, obtenemos una instancia del driver de MySQL
 	Connection con=null;
 	try {
+		
+		File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\config.properties"); //establecemos la ruta del archivo config.properties
+		  String confPath = f.getPath(); //convertimos la ruta del fichero config a una variable string
+		  
+		  Properties appProps = new Properties();
+		  appProps.load(new FileInputStream(confPath)); // cargamos las propiedades del fichero
+		  
+		
+		  
+		  String acceso = appProps.getProperty("path"); //cojemos los parametros para conectar con la base de datos
+		  String user = appProps.getProperty("user");
+		  String pass = appProps.getProperty("pass");	
+		  
+		
 	  Class.forName("com.mysql.jdbc.Driver");
 	  // Introducir correctamente el nombre y datos de conexión - Idealmente, estos datos se 
 	  // indican en un fichero de propiedades
-	  con= DriverManager.getConnection("jdbc:mysql://oraclepr.uco.es:3306/i82doalp","i82doalp","1234");
+	  con= DriverManager.getConnection(acceso,user,pass);
 	// Importante capturar 
 	} catch(Exception e) {
 	  System.out.println(e);
@@ -34,10 +51,20 @@ public class AnuncioDAO {
   public static int GuardarAnuncio(Anuncio a){
 	int status=0;
 	try{
+		
+		File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
+		  String confPath = f.getPath();//Pasamos el path del fichero a una variable String
+		  
+		  Properties appProps = new Properties();
+		  appProps.load(new FileInputStream(confPath));//Cargamos las propiedades
+		  
+		  String save = appProps.getProperty("nuevo anuncio");//pasamos la instruccion sql a una variable.
+		
+		
 		Connection con=getConnection();
 		// PreparedStament será más rápido (si es uso recurrente) y permite invocación a parámetros
 		// Lo habitual es que las consultas y sentencias SQL estén en un fichero de propiedades aparte, no en código
-		PreparedStatement ps=con.prepareStatement("insert into Anuncio (Id,Tipo,Titulo,Propietario,Fecha_inicio,Fecha_fin,Cuerpo) values(?,?,?,?,?,?,?)");
+		PreparedStatement ps=con.prepareStatement(save);
 		// El orden de los parámetros debe coincidir con las '?' del código SQL
 		
 		
@@ -109,10 +136,21 @@ public static Hashtable<String,String> mostrarAnuncio  (Anuncio a) {
 	Statement stmt = null; 
 	Hashtable<String,String> resul = null;
 	try {
+		
+		
+		File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
+		  String confPath = f.getPath();//Pasamos el path del fichero a una variable String
+		  
+		  Properties appProps = new Properties();
+		  appProps.load(new FileInputStream(confPath));//Cargamos las propiedades
+		  
+		  String mostrarAnuncio = appProps.getProperty("mostar anuncio");//pasamos la instruccion sql a una variable.
+		
+		
 		Connection con=getConnection();
 		// En consultas, se hace uso de un Statement 
 		stmt = con.createStatement();
-	    ResultSet rs = stmt.executeQuery("select Id,Tipo,Titulo,Propietario,Fecha_inicio,Fecha_fin,Cuerpo  from Anuncio where Id = " + a.getId());
+	    ResultSet rs = stmt.executeQuery(mostrarAnuncio);
 	    while (rs.next()) {
 	    	int id = rs.getInt("Id");
 	        String tipo = rs.getString("Tipo");
@@ -154,6 +192,54 @@ public static int delete(Anuncio a){
 
 	return status;
 }
+
+
+
+public static ArrayList<Anuncio> meterAnuncios(){
+	Statement stmt = null; 
+	ArrayList<Anuncio> anuncios = new ArrayList<Anuncio>();
+	try{
+		
+
+		File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
+		  String confPath = f.getPath();//Pasamos el path del fichero a una variable String
+		  
+		  Properties appProps = new Properties();
+		  appProps.load(new FileInputStream(confPath));//Cargamos las propiedades
+		  
+		  String todos_anuncios = appProps.getProperty("seleccionar anuncios");//pasamos la instruccion sql a una variable.
+		
+		
+		
+		Connection con=getConnection();
+		stmt = con.createStatement();
+	    ResultSet rs = stmt.executeQuery(todos_anuncios);
+	    while (rs.next()) {
+	    	int id = rs.getInt("Id");
+	    	String tipo = rs.getString("Tipo");
+	        String titulo = rs.getString("Titulo");
+	        String propietario = rs.getString("Propietario");
+	        Date fecha_inicio = rs.getDate("Fecha_inicio");
+	        Date fecha_fin = rs.getDate("Fecha_fin");
+	        String cuerpo = rs.getString("Cuerpo");
+	        Anuncio a = new Anuncio();
+	        a.setId(id);
+	        a.setTipo(tipo);
+	        a.setTitulo(titulo);
+	        a.setPropietario(propietario);
+	        a.setFechainicio(fecha_inicio);
+	        a.setFechafin(fecha_fin);
+	        a.setCuerpo(cuerpo);
+	        anuncios.add(a);
+	    }
+	    
+	    if (stmt != null) 
+	    	stmt.close();
+	}catch(Exception e){System.out.println(e);}
+
+	return anuncios;
+}
+
 
 	
 }
