@@ -26,11 +26,8 @@ public class Main {
 		Scanner sn = new Scanner(System.in);
 		
 		String email;										//STRINGS AUXILIARES
-		String ruta;
 		
 		
-		Calendar c = Calendar.getInstance();				//FORMATO FECHA
-		Date horaActual = new Date();
 		
 		
 		ArrayList<Anuncio> an = new ArrayList<Anuncio>();	//ARRAYLISTS AUXILIARES
@@ -39,15 +36,30 @@ public class Main {
 		GestorContactos g = GestorContactos.getInstance();	//INSTANCIAS AUXILIARES
 		Tablon t = Tablon.getInstance();	
 		
+		
+		// metemos los anuncios de la base de datos en el programa
+		an = AnuncioDAO.meterAnuncios();
+		for(int i=0;i<an.size();i++) {
+			System.out.println(an.get(i).getCuerpo());
+		}
+		
+		
+		
 		ArrayList<Contacto> guardados = new ArrayList<Contacto>();	//Estamos metiendo contactos desde base de
 																	//datos
 		guardados = ContactoDAO.meterContactos();
 		g.setContactos(guardados);
 		
-		ArrayList<Anuncio> anuncios_guardados = new ArrayList<Anuncio>();
 		
-		anuncios_guardados = AnuncioDAO.meterAnuncios();
-		t.setAnuncios(anuncios_guardados);
+		
+		
+		if(an.isEmpty()) {
+			id = 1;
+		}else {
+			id = an.get(an.size()-1).getId();
+			id++;
+		}
+		
 		
 		
 		while(salir == false) 
@@ -92,7 +104,7 @@ public class Main {
 					{	
 						
 																				//ENTRAMOS EN EL SEGUNDO MENÚ PERSONAL
-						if(actual.getEmail().equals(email))
+						if(encontrado)
 						{
 							
 							//SEGUNDO MENU INICIO DE SESIÓN CORRECTO
@@ -146,7 +158,7 @@ public class Main {
 											
 											boolean loop;
 											int option;
-											int diaI,mesI,anoI,horaI,minI,diaF,mesF,anoF,horaF,minF;
+											
 			
 											
 											
@@ -171,26 +183,16 @@ public class Main {
 													cuerpo = sc1.nextLine();
 													
 													
-													c.set(c.HOUR_OF_DAY,00);
-													c.set(c.MINUTE,00);
-													c.set(c.SECOND,00);
 													
-													Date fFin = c.getTime();
-													
-													
-													if(t.getAnuncios().isEmpty()) {
-														id = 1;
-													}else {
-														id = t.getAnuncios().get(t.getAnuncios().size()-1).getId();
-														id++;
-													}
 													
 													a.setId(id);						//ESTABLECEMOS LOS VALORES DE ANUNCIO a Y LO
+													System.out.println(id);
 													a.setTipo("General");				//AÑADIMOS A LA LISTA GENERAL DE ANUNCIOS
+													System.out.println(a.getTipo());
 													a.setTitulo(titulo);
 													a.setCuerpo(cuerpo);
-													a.setFechainicio(horaActual);
-													a.setFechafin(fFin);
+													a.setFechainicio("21/11/2020 00:00");
+													a.setFechafin("21/11/2020 00:00");
 													a.setEstado("Editado");
 													an.add(a);
 													int status = AnuncioDAO.GuardarAnuncio(a);
@@ -203,11 +205,16 @@ public class Main {
 														System.out.println("Error al guardar anuncio en la base de datos.");
 													}
 													
-													
-													status = AnuncioDAO.GuardarDestinatarios(a,actual);
-													if(status == 0) {
-														System.out.println("Error al guardar anuncio en la base de datos.");
+													for(int i=0;i<g.getContactos().size();i++) {
+														status = AnuncioDAO.GuardarDestinatarios(a,g.getContactos().get(i).getEmail());
+														if(status == 0) {
+															System.out.println("Error al guardar destinatario en la base de datos");
+														}
 													}
+													
+													
+													
+													
 													
 													id++;
 													
@@ -274,6 +281,10 @@ public class Main {
 													System.out.println("Introducir cuerpo del anuncio : ");
 													cuerpo = sc1.nextLine();
 													
+
+							
+													
+													
 													a.setId(id);
 													a.setTipo("Individualizado");
 													a.setDestinatarios(aux);
@@ -281,8 +292,23 @@ public class Main {
 													a.setIntereses(InteresesAux);											
 													a.setTitulo(titulo);
 													a.setCuerpo(cuerpo);
-													a.setFechainicio(horaActual);
+													a.setFechainicio("21/11/2020 00:00");
+													a.setFechafin("21/11/2020 00:00");
 													a.setEstado("Editado");
+													for(int i=0;i<aux.size();i++) {
+														status = AnuncioDAO.GuardarDestinatarios(a, aux.get(i));
+														if(status == 0) {
+															System.out.println("Error al guardar en la base de datos.");
+														}
+													}
+													
+													status = AnuncioDAO.GuardarAnuncio(a);
+													if(status == 0) {
+														System.out.println("Error al guardar en la base de datos.");
+													}else {
+														System.out.println("Anuncio guardado en la base de datos de forma correcta.");
+													}
+													
 													System.out.println("\n¡Anuncio creado!\n");
 
 													an.add(a);
@@ -356,18 +382,37 @@ public class Main {
 													
 													System.out.println("Introducir cuerpo del anuncio : ");
 													cuerpo = sc1.nextLine();
+													
+													
+													
 													a.setTipo("Tematico");
 													a.setDestinatarios(aux);
+													for(int i=0;i<g.getContactos().size();i++) {
+														status = AnuncioDAO.GuardarDestinatarios(a,g.getContactos().get(i).getEmail());
+														if(status == 0) {
+															System.out.println("Error al guardar destinatario en la base de datos");
+														}
+													}
 													a.setPropietario(g.getContacto(email).getEmail());
-													a.setIntereses(InteresesAux);											
+													a.setIntereses(InteresesAux);
+													for(int i=0;i<InteresesAux.size();i++) {
+														status = AnuncioDAO.meterIntereses(actual,InteresesAux.get(i));
+														if(status == 0) {
+															System.out.println("Error al guardar intereses en la base de datos.");
+														}
+													}
 													a.setTitulo(titulo);
 													a.setCuerpo(cuerpo);
-													a.setFechainicio(horaActual);
+													a.setFechainicio("21/11/2020 00:00");
+													a.setFechafin("21/11/2020 00:00");
 													a.setEstado("Editado");
 													System.out.println("\n¡Anuncio creado!\n");
 													a.setIntereses(InteresesAux);
 
-													
+													status = AnuncioDAO.GuardarAnuncio(a);
+													if(status == 0) {
+														System.out.println("Error al guardar en la base de datos.");
+													}
 												
 													
 													an.add(a);
@@ -402,35 +447,12 @@ public class Main {
 															
 														}
 													}while(!g.validarFecha(fecha_inicio));
-		
-													String day=fecha_inicio.substring(0,1);
-													String month=fecha_inicio.substring(3,4);
-													String year=fecha_inicio.substring(6,7);
-													
-													diaI = Integer.parseInt(day);
-													mesI = Integer.parseInt(month);
-													anoI = Integer.parseInt(year);
-													
 													
 															
 													System.out.println("Introducir hora inicio (Por favor, sigue el formato HH:MM ej 18:00) ");
 													hora_inicio = sc1.nextLine();
 													
-													String hora=hora_inicio.substring(0,1);
-													String minuto=hora_inicio.substring(3,4);
-													
-													horaI = Integer.parseInt(hora);
-													minI = Integer.parseInt(minuto);
-
-													
-													c.set(c.YEAR,anoI);
-													c.set(c.MONTH,mesI);
-													c.set(c.DAY_OF_MONTH,diaI);
-													c.set(c.HOUR_OF_DAY,horaI);
-													c.set(c.MINUTE,minI);
-													c.set(c.SECOND,00);
-													Date fechaInicio = c.getTime();
-													a.setFechainicio(fechaInicio);
+													a.setFechainicio(fecha_inicio+" "+hora_inicio);
 													
 													
 													
@@ -443,47 +465,41 @@ public class Main {
 															System.out.println("Fecha introducida no válida ");
 
 														}
-													}while(!g.validarFecha(fecha_inicio));
-		
-													day=fecha_fin.substring(0,1);
-													month=fecha_fin.substring(3,4);
-													year=fecha_fin.substring(6,7);
-													
-													diaF = Integer.parseInt(day);
-													mesF = Integer.parseInt(month);
-													anoF = Integer.parseInt(year);
-													
+													}while(!g.validarFecha(fecha_fin));
 													
 															
 													System.out.println("Introducir hora fin (Por favor, sigue el formato HH:MM ej 18:00) ");
 													hora_fin = sc1.nextLine();
 													
-													hora=hora_fin.substring(0,1);
-													minuto=hora_fin.substring(3,4);
 													
-													horaF = Integer.parseInt(hora);
-													minF = Integer.parseInt(minuto);
-													
-													c.set(c.YEAR,anoF);
-													c.set(c.MONTH,mesF);
-													c.set(c.DAY_OF_MONTH,diaF);
-													c.set(c.HOUR_OF_DAY,horaF);
-													c.set(c.MINUTE,minF);
-													c.set(c.SECOND,00);
-
 													
 													for(int i=0;i<g.getContactos().size();i++) 
 													{
 														aux.add(g.getContactos().get(i).getEmail());
 													}
 													
-													Date fechaFin = c.getTime();
-													a.setFechafin(fechaFin);
+													a.setFechafin(fecha_fin+" "+hora_fin);
 													a.setDestinatarios(aux);
 													a.setPropietario(g.getContacto(email).getEmail());
 													a.setIntereses(g.getInteresesValidos());
 													a.setEstado("Editado");
-													System.out.println("\n¡Anuncio creado!\n");
+													
+													status = AnuncioDAO.GuardarAnuncio(a);
+													
+													if(status!=0) {
+														System.out.println("\n¡Anuncio creado!");
+														System.out.println("RECUERDE que no será visible hasta que lo publique en el GESTOR DE ANUNCIOS");
+
+													}else {
+														System.out.println("Error al guardar anuncio en la base de datos.");
+													}
+													
+													for(int i=0;i<g.getContactos().size();i++) {
+														status = AnuncioDAO.GuardarDestinatarios(a,g.getContactos().get(i).getEmail());
+														if(status == 0) {
+															System.out.println("Error al guardar destinatario en la base de datos");
+														}
+													}
 
 													
 													an.add(a);
@@ -542,12 +558,7 @@ public class Main {
 										
 										else if(an.get(i).getTipo().contentEquals("Flash") || an.get(i).getEstado().contentEquals("Publicado"))
 										{
-											Date hoy=new Date();
-												if(hoy.after(an.get(i).getFechainicio()) && hoy.before(an.get(i).getFechafin()))
-												{
-													t.mostrarAnuncio(an.get(i));
-
-												}
+											//Falta una funcion
 											
 										}
 										
@@ -727,38 +738,16 @@ public class Main {
 																	}
 																}while(!g.validarFecha(fecha_inicio));
 					
-																String day=fecha_inicio.substring(0,1);
-																String month=fecha_inicio.substring(3,4);
-																String year=fecha_inicio.substring(6,7);
-																
-																int diaI = Integer.parseInt(day);
-																int mesI = Integer.parseInt(month);
-																int anoI = Integer.parseInt(year);
-																
 																
 																		
 																System.out.println("Introducir hora inicio (Por favor, sigue el formato HH:MM ej 18:00) ");
 																String hora_inicio = sn.nextLine();
 																
-																String hora=hora_inicio.substring(0,1);
-																String minuto=hora_inicio.substring(3,4);
 																
-																int horaI = Integer.parseInt(hora);
-																int minI = Integer.parseInt(minuto);
-
+																a_modificar.setFechainicio(fecha_inicio+" "+hora_inicio);
 																
-																c.set(c.YEAR,anoI);
-																c.set(c.MONTH,mesI);
-																c.set(c.DAY_OF_MONTH,diaI);
-																c.set(c.HOUR_OF_DAY,horaI);
-																c.set(c.MINUTE,minI);
-																c.set(c.SECOND,00);
-																Date fechaInicio = c.getTime();
-																a_modificar.setFechainicio(fechaInicio);
-																
-																Date fechaINICIO = c.getTime();
 																cambiado=true;
-																a_modificar.setFechainicio(fechaINICIO);
+																
 																a_modificar.setEstado("En espera");
 
 																
@@ -799,35 +788,15 @@ public class Main {
 																	}
 																}while(!g.validarFecha(fecha_fin));
 					
-																String day=fecha_fin.substring(0,1);
-																String month=fecha_fin.substring(3,4);
-																String year=fecha_fin.substring(6,7);
-																
-																int diaF = Integer.parseInt(day);
-																int mesF = Integer.parseInt(month);
-																int anoF = Integer.parseInt(year);
 																
 																
 																		
 																System.out.println("Introducir hora fin (Por favor, sigue el formato HH:MM ej 18:00) ");
 																String hora_fin = sn.nextLine();
 																
-																String hora=hora_fin.substring(0,1);
-																String minuto=hora_fin.substring(3,4);
 																
-																int horaF = Integer.parseInt(hora);
-																int minF = Integer.parseInt(minuto);
 																
-																c.set(c.YEAR,anoF);
-																c.set(c.MONTH,mesF);
-																c.set(c.DAY_OF_MONTH,diaF);
-																c.set(c.HOUR_OF_DAY,horaF);
-																c.set(c.MINUTE,minF);
-																c.set(c.SECOND,00);
-																
-																Date fechaFIN = c.getTime();
-																
-																a_modificar.setFechafin(fechaFIN);
+																a_modificar.setFechafin(fecha_fin+" "+hora_fin);
 																cambiado=true;
 																a_modificar.setEstado("En espera");
 
@@ -1135,28 +1104,14 @@ public class Main {
 															}
 														}while(!g.validarFecha(fecha));
 														
-														String day=fecha.substring(0,1);
-														String month=fecha.substring(3,4);
-														String year=fecha.substring(6,7);
-														
-														int diaI = Integer.parseInt(day);
-														int mesI = Integer.parseInt(month);
-														int anoI = Integer.parseInt(year);
 														
 														for(int i=0;i<an.size();i++)
 														{
 															
-															@SuppressWarnings("deprecation")
-															int aux_dia=an.get(i).getFechainicio().getDay();
-															int aux_mes=an.get(i).getFechainicio().getMonth();
-															int aux_ano=an.get(i).getFechainicio().getYear();
-
-															if(aux_dia==diaI && aux_mes==mesI && aux_ano==anoI)
-																	{
-																		
-																	t.getInfoAnuncio(an.get(i));
-																														
-																	}
+															if(fecha.contentEquals(an.get(i).getFechainicio())) {
+																t.getInfoAnuncio(an.get(i));
+															}
+																												
 														}
 														
 														

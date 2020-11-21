@@ -10,8 +10,8 @@ public class Anuncio {
 	private String titulo;
 	private String propietario;
 	private ArrayList<String> destinatarios;
-	private Date fechainicio;
-	private Date fechafin;
+	private String fechainicio;
+	private String fechafin;
 	private ArrayList<String> intereses;
 	private String cuerpo;
 	private String estado;
@@ -72,19 +72,19 @@ public class Anuncio {
 		return tipo;
 	}
 
-	public Date getFechafin() {
+	public String getFechafin() {
 		return fechafin;
 	}
 
-	public void setFechafin(Date fechafin) {
+	public void setFechafin(String fechafin) {
 		this.fechafin = fechafin;
 	}
 
-	public Date getFechainicio() {
+	public String getFechainicio() {
 		return fechainicio;
 	}
 
-	public void setFechainicio(Date fechainicio) {
+	public void setFechainicio(String fechainicio) {
 		this.fechainicio = fechainicio;
 	}
 

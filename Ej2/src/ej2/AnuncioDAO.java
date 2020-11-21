@@ -74,10 +74,11 @@ public class AnuncioDAO {
 		ps.setInt(1,a.getId());
 		ps.setString(2,a.getTipo());
 		ps.setString(3,a.getTitulo());
-		ps.setString(4,a.getPropietario());
-		ps.setString(5,a.getFechainicio().toString());
-		ps.setString(6,a.getFechafin().toString());
-		ps.setString(7,a.getCuerpo());
+		ps.setString(4,a.getEstado());
+		ps.setString(5,a.getPropietario());
+		ps.setString(6,a.getFechainicio().toString());
+		ps.setString(7,a.getFechafin().toString());
+		ps.setString(8,a.getCuerpo());
 		
 		status = ps.executeUpdate();
 	// Importante capturar las excepciones. Si nuestra aplicaciones tiene más opciones de fallo,
@@ -87,26 +88,29 @@ public class AnuncioDAO {
 	return status;
 }
   
-  public static int GuardarDestinatarios(Anuncio a,Contacto c){
+  public static int GuardarDestinatarios(Anuncio a,String email){
 	int status=0;
 	try{
-/*
-		File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\sql.properties"); //establecemos la ruta del archivo config.properties
-		  String confPath = f.getPath(); //convertimos la ruta del fichero config a una variable string
+
+
+		File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
+		  String confPath = f.getPath();//Pasamos el path del fichero a una variable String
 		  
 		  Properties appProps = new Properties();
-		  appProps.load(new FileInputStream(confPath)); // cargamos las propiedades del fichero
+		  appProps.load(new FileInputStream(confPath));//Cargamos las propiedades
 		  
-		  String destinatarios = appProps.getProperty("guardar_destinatarios");
+		  String save = appProps.getProperty("guardar_destinatarios");//pasamos la instruccion sql a una variable.
 		
-	*/	
+		
+		
+		
 		Connection con=getConnection();
 		// PreparedStament será más rápido (si es uso recurrente) y permite invocación a parámetros
 		// Lo habitual es que las consultas y sentencias SQL estén en un fichero de propiedades aparte, no en código
-		PreparedStatement ps=con.prepareStatement("insert into A_D (idAnuncio,idContacto) values(?,?)");
+		PreparedStatement ps=con.prepareStatement(save);
 		// El orden de los parámetros debe coincidir con las '?' del código SQL
 		ps.setInt(1,a.getId());
-		ps.setString(2,c.getEmail());
+		ps.setString(2,email);
 		
 		
 		status = ps.executeUpdate();
@@ -209,9 +213,10 @@ public static int delete(Anuncio a){
 public static ArrayList<Anuncio> meterAnuncios(){
 	Statement stmt = null; 
 	ArrayList<Anuncio> anuncios = new ArrayList<Anuncio>();
+	
 	try{
 		
-
+		
 		File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
 		  String confPath = f.getPath();//Pasamos el path del fichero a una variable String
 		  
@@ -221,7 +226,6 @@ public static ArrayList<Anuncio> meterAnuncios(){
 		  String todos_anuncios = appProps.getProperty("seleccionar_anuncios");//pasamos la instruccion sql a una variable.
 		
 		
-		
 		Connection con=getConnection();
 		stmt = con.createStatement();
 	    ResultSet rs = stmt.executeQuery(todos_anuncios);
@@ -229,69 +233,17 @@ public static ArrayList<Anuncio> meterAnuncios(){
 	    	int id = rs.getInt("Id");
 	    	String tipo = rs.getString("Tipo");
 	        String titulo = rs.getString("Titulo");
+	        String estado = rs.getString("Estado");
 	        String propietario = rs.getString("Propietario");
 	        String fecha_inicio = rs.getString("Fecha_inicio");
 	        String fecha_fin = rs.getString("Fecha_fin");
 	        String cuerpo = rs.getString("Cuerpo");
 	        Anuncio a = new Anuncio();
 	        
-	        Calendar c = Calendar.getInstance();
 	        
-	        String day=fecha_inicio.substring(0,1);
-			String month=fecha_inicio.substring(3,4);
-			String year=fecha_inicio.substring(6,9);
-			
-			int diaI = Integer.parseInt(day);
-			int mesI = Integer.parseInt(month);
-			int anoI = Integer.parseInt(year);
-			
 
-			String hora=fecha_inicio.substring(11,12);
-			String minuto=fecha_inicio.substring(14,15);
-			String segundos = fecha_inicio.substring(17,18);
-			
-			int horaI = Integer.parseInt(hora);
-			int minI = Integer.parseInt(minuto);
-			int secI = Integer.parseInt(segundos);
-			
-
-			c.set(c.YEAR,anoI);
-			c.set(c.MONTH,mesI);
-			c.set(c.DAY_OF_MONTH,diaI);
-			c.set(c.HOUR_OF_DAY,horaI);
-			c.set(c.MINUTE,minI);
-			c.set(c.SECOND,secI);
-			Date fechaInicio = c.getTime();
-			a.setFechainicio(fechaInicio);
-			
-			
-			 day=fecha_inicio.substring(0,1);
-			 month=fecha_inicio.substring(3,4);
-			 year=fecha_inicio.substring(6,9);
-			
-			int diaF = Integer.parseInt(day);
-			int mesF = Integer.parseInt(month);
-			int anoF = Integer.parseInt(year);
-			
-
-			 hora=fecha_fin.substring(11,12);
-			 minuto=fecha_fin.substring(14,15);
-			 segundos = fecha_fin.substring(17,18);
-			
-			int horaF = Integer.parseInt(hora);
-			int minF = Integer.parseInt(minuto);
-			int secF = Integer.parseInt(segundos);
-			
-
-			c.set(c.YEAR,anoF);
-			c.set(c.MONTH,mesF);
-			c.set(c.DAY_OF_MONTH,diaF);
-			c.set(c.HOUR_OF_DAY,horaF);
-			c.set(c.MINUTE,minF);
-			c.set(c.SECOND,secF);
-			Date fechaFin = c.getTime();
-			a.setFechainicio(fechaFin);
-	        
+			a.setFechainicio(fecha_inicio);
+			a.setFechafin(fecha_fin);
 	        
 	        
 	        
@@ -299,18 +251,54 @@ public static ArrayList<Anuncio> meterAnuncios(){
 	        a.setId(id);
 	        a.setTipo(tipo);
 	        a.setTitulo(titulo);
+	        a.setEstado(estado);
 	        a.setPropietario(propietario);
 	        a.setCuerpo(cuerpo);
 	        anuncios.add(a);
+	        
+	        
 	    }
 	    
-	    if (stmt != null) 
-	    	stmt.close();
+	    if (rs != null) 
+	    	rs.close();
 	}catch(Exception e){System.out.println(e);}
 
 	return anuncios;
 }
 
+
+public static int meterIntereses(Contacto c,String interes){
+	
+	int status=0;
+	try{
+		
+		File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
+		  String confPath = f.getPath();//Pasamos el path del fichero a una variable String
+		  
+		  Properties appProps = new Properties();
+		  appProps.load(new FileInputStream(confPath));//Cargamos las propiedades
+		  
+		  String save = appProps.getProperty("nuevo_C_I");//pasamos la instruccion sql a una variable.
+		
+		
+		
+		
+		Connection con=getConnection();
+		// PreparedStament será más rápido (si es uso recurrente) y permite invocación a parámetros
+		// Lo habitual es que las consultas y sentencias SQL estén en un fichero de propiedades aparte, no en código
+		PreparedStatement ps=con.prepareStatement(save);
+		// El orden de los parámetros debe coincidir con las '?' del código SQL
+		ps.setString(1,c.getEmail());
+		ps.setString(2,interes);
+		
+		status = ps.executeUpdate();
+	// Importante capturar las excepciones. Si nuestra aplicaciones tiene más opciones de fallo,
+	// podemos capturar directamente SQLException
+	}catch(Exception e){System.out.println(e);}
+	// El invocante siempre debería tener información del resultado de la sentencia SQL
+	return status;
+	
+}
 
 	
 }
