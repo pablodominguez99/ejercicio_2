@@ -19,7 +19,7 @@ public class ContactoDAO {
 		  Class.forName("com.mysql.jdbc.Driver");
 		  
 		  
-		  File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\config.properties"); //establecemos la ruta del archivo config.properties
+		  File f = new File("C:\\Users\\crist\\Desktop\\INGENIERIA\\PW\\repository\\Ej2\\src\\ej2\\config.properties"); //establecemos la ruta del archivo config.properties
 		  String confPath = f.getPath(); //convertimos la ruta del fichero config a una variable string
 		  
 		  Properties appProps = new Properties();
@@ -48,7 +48,7 @@ public class ContactoDAO {
 		int status=0;
 		try{
 			
-			File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
+			File f = new File("C:\\Users\\crist\\Desktop\\INGENIERIA\\PW\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
 			  String confPath = f.getPath();//Pasamos el path del fichero a una variable String
 			  
 			  Properties appProps = new Properties();
@@ -84,7 +84,7 @@ public class ContactoDAO {
 		
 		try{
 			
-			File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
+			File f = new File("C:\\Users\\crist\\Desktop\\INGENIERIA\\PW\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
 			  String confPath = f.getPath();//Pasamos el path del fichero a una variable String
 			  
 			  Properties appProps = new Properties();
@@ -110,7 +110,7 @@ public class ContactoDAO {
 		try {
 			
 
-			File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
+			File f = new File("C:\\Users\\crist\\Desktop\\INGENIERIA\\PW\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
 			  String confPath = f.getPath();//Pasamos el path del fichero a una variable String
 			  
 			  Properties appProps = new Properties();
@@ -160,7 +160,7 @@ public class ContactoDAO {
 		ArrayList<Contacto> contactos = new ArrayList<Contacto>();
 		try{
 			
-			File f = new File("C:\\Users\\w10\\git\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
+			File f = new File("C:\\Users\\crist\\Desktop\\INGENIERIA\\PW\\repository\\Ej2\\src\\ej2\\sql.properties");//obtenemos la ruta del fichero sql.properties
 			  String confPath = f.getPath();//Pasamos el path del fichero a una variable String
 			  
 			  Properties appProps = new Properties();
